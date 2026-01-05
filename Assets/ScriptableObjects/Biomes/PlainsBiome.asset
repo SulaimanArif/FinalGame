@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea653e809afe77140868b7b710650b5a, type: 3}
+  m_Name: PlainsBiome
+  m_EditorClassIdentifier: 
+  biomeName: Plains
+  terrainMaterial: {fileID: 2100000, guid: d6a653a0463dfbd43ba42b47d5110dc6, type: 2}
+  heightMultiplier: 8
+  heightOffset: 0
+  vegetationPrefabs:
+  - {fileID: 1439904337943108576, guid: ef62619642b0df743b22dd5120c6ac4d, type: 3}
+  - {fileID: 2784076628483284886, guid: fc991291bcee34046a5147d67b5e87f4, type: 3}
+  - {fileID: 4533985104438929789, guid: 3f88ace088bf22d4697d58504ea1ce8f, type: 3}
+  - {fileID: 75099270147285260, guid: fb4b616e7acaf3845b99b4a7364d26a7, type: 3}
+  - {fileID: 8123141273917358956, guid: 13dd10d6717971d4ea9125d158299b1e, type: 3}
+  - {fileID: 2304540294968618315, guid: b8217b9c1183a5144b666d1dd63980c4, type: 3}
+  - {fileID: 2954823824624447290, guid: 194e9111af0c33840a49d573f2b26952, type: 3}
+  vegetationDensity: 0.05
+  moistureMin: 0
+  moistureMax: 0.5
