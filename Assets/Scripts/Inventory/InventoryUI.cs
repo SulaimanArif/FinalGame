@@ -11,6 +11,12 @@ public class InventoryUI : MonoBehaviour
     public Transform slotsParent;
     public GameObject slotPrefab;
     
+    [Header("Tabs")]
+    public GameObject inventoryTab;
+    public GameObject craftingTab;
+    public Button inventoryTabButton;
+    public Button craftingTabButton;
+    
     [Header("Input")]
     public PlayerInputActions inputActions;
     
@@ -20,6 +26,7 @@ public class InventoryUI : MonoBehaviour
     
     private InventorySlot[,] slotUIArray;
     private bool isInventoryOpen = false;
+    private bool isInventoryTabActive = true;
     
     void Awake()
     {
@@ -52,6 +59,30 @@ public class InventoryUI : MonoBehaviour
         {
             inventorySystem.OnInventoryChanged.AddListener(RefreshInventoryUI);
         }
+        
+        // Setup tab buttons
+        if (inventoryTabButton != null)
+        {
+            inventoryTabButton.onClick.AddListener(() => SwitchTab(true));
+            Debug.Log("Inventory tab button listener added");
+        }
+        else
+        {
+            Debug.LogError("Inventory Tab Button is not assigned!");
+        }
+        
+        if (craftingTabButton != null)
+        {
+            craftingTabButton.onClick.AddListener(() => SwitchTab(false));
+            Debug.Log("Crafting tab button listener added");
+        }
+        else
+        {
+            Debug.LogError("Crafting Tab Button is not assigned!");
+        }
+        
+        // Default to inventory tab
+        SwitchTab(true);
     }
     
     void CreateInventorySlots()
@@ -110,6 +141,53 @@ public class InventoryUI : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+        }
+    }
+    
+    void SwitchTab(bool showInventory)
+    {
+        Debug.Log($"Switching tab to: {(showInventory ? "Inventory" : "Crafting")}");
+        
+        isInventoryTabActive = showInventory;
+        
+        if (inventoryTab != null)
+        {
+            inventoryTab.SetActive(showInventory);
+            Debug.Log($"Inventory tab set to: {showInventory}");
+        }
+        else
+        {
+            Debug.LogError("Inventory Tab GameObject is not assigned!");
+        }
+        
+        if (craftingTab != null)
+        {
+            craftingTab.SetActive(!showInventory);
+            Debug.Log($"Crafting tab set to: {!showInventory}");
+        }
+        else
+        {
+            Debug.LogError("Crafting Tab GameObject is not assigned!");
+        }
+        
+        // Update button colors
+        UpdateTabButtonColors();
+    }
+    
+    void UpdateTabButtonColors()
+    {
+        if (inventoryTabButton != null)
+        {
+            var colors = inventoryTabButton.colors;
+            colors.normalColor = isInventoryTabActive ? Color.white : new Color(0.7f, 0.7f, 0.7f);
+            inventoryTabButton.colors = colors;
+        }
+        
+        if (craftingTabButton != null)
+        {
+            var colors = craftingTabButton.colors;
+            colors.normalColor = !isInventoryTabActive ? Color.white : new Color(0.7f, 0.7f, 0.7f);
+            craftingTabButton.colors = colors;
         }
     }
 }

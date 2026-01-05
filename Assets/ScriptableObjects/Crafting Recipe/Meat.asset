@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a97412094a8d24458255280647bbd82, type: 3}
+  m_Name: Meat
+  m_EditorClassIdentifier: 
+  recipeName: Meat
+  resultItem: {fileID: 11400000, guid: 498b315b16569fb45a22ad5f50559ff5, type: 2}
+  resultAmount: 1
+  requiredMaterials:
+  - item: {fileID: 11400000, guid: 9c161785c792e0c479ec2067bbe171bc, type: 2}
+    amount: 2
+  - item: {fileID: 11400000, guid: 498b315b16569fb45a22ad5f50559ff5, type: 2}
+    amount: 1
+  recipeIcon: {fileID: 21300000, guid: 70f5afe5b50f4354fbe34e332d233687, type: 3}
+  description: Craft description
