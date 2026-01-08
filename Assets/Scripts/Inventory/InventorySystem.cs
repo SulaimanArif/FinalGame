@@ -38,6 +38,33 @@ public class InventorySystem : MonoBehaviour
         if (item == null || amount <= 0) return false;
         
         int remainingAmount = amount;
+
+        if (item.itemType == ItemType.Tool && item.toolData != null)
+        {
+            // Tools don't stack - add individually
+            while (remainingAmount > 0)
+            {
+                Vector2Int emptySlot = FindEmptySlot();
+                
+                if (emptySlot.x == -1)
+                {
+                    Debug.Log("Inventory is full!");
+                    OnInventoryChanged?.Invoke();
+                    return false;
+                }
+                
+                // Create new tool instance
+                slots[emptySlot.x, emptySlot.y].item = item;
+                slots[emptySlot.x, emptySlot.y].amount = 1;
+                slots[emptySlot.x, emptySlot.y].toolInstance = new ToolInstance(item.toolData);
+                
+                remainingAmount--;
+            }
+            
+            OnItemAdded?.Invoke(item, amount);
+            OnInventoryChanged?.Invoke();
+            return true;
+        }
         
         // If stackable, try to add to existing stacks first
         if (item.isStackable)
@@ -170,4 +197,5 @@ public class InventorySlotData
 {
     public ItemData item;
     public int amount;
+    public ToolInstance toolInstance; // Track tool durability per slot
 }

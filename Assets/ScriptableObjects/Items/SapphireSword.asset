@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46ea7398a0e127f459fbdd2bde7833bd, type: 3}
+  m_Name: SapphireSword
+  m_EditorClassIdentifier: 
+  itemName: Sapphire Sword
+  itemID: sword_sapphire
+  description: Sapphire sword that does 80 damage
+  icon: {fileID: 21300000, guid: d14c1e25bb1618c4fb2c1c1944f78113, type: 3}
+  isStackable: 0
+  maxStackSize: 99
+  itemType: 2
+  worldPrefab: {fileID: 6348944073484937207, guid: fc48dc238afa55d47bfbc1fb3a4f3d5a, type: 3}
+  isEdible: 0
+  hungerRestoreAmount: 20
+  healthRestoreAmount: 0
+  toolData: {fileID: 11400000, guid: 15a7121ceb02b3f4db524b97cccc1dd4, type: 2}

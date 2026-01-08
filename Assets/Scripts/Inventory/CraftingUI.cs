@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
+using System.Linq;
 
 public class CraftingUI : MonoBehaviour
 {
@@ -110,6 +111,8 @@ public class CraftingUI : MonoBehaviour
     {
         selectedRecipe = recipe;
         
+        Debug.Log($"=== SELECT RECIPE: {recipe.recipeName} ===");
+        
         if (recipeDetailsPanel != null)
         {
             recipeDetailsPanel.SetActive(true);
@@ -120,6 +123,7 @@ public class CraftingUI : MonoBehaviour
         {
             recipeIcon.sprite = recipe.GetIcon();
             recipeIcon.enabled = true;
+            recipeIcon.color = Color.white;
         }
         
         if (recipeNameText != null)
@@ -139,30 +143,92 @@ public class CraftingUI : MonoBehaviour
         }
         spawnedMaterialDisplays.Clear();
         
+        Debug.Log($"Recipe has {recipe.requiredMaterials.Length} materials");
+        
         // Display required materials
+        int index = 0;
         foreach (CraftingMaterial material in recipe.requiredMaterials)
         {
-            GameObject displayObj = Instantiate(materialDisplayPrefab, materialsContainer);
+            Debug.Log($"--- Material {index}: {material.item?.itemName ?? "NULL"} ---");
             
-            Image matIcon = displayObj.transform.Find("Icon")?.GetComponent<Image>();
-            if (matIcon != null && material.item.icon != null)
+            GameObject displayObj = Instantiate(materialDisplayPrefab, materialsContainer);
+            Debug.Log($"Instantiated display object: {displayObj.name}");
+            
+            // Print all children
+            Debug.Log($"Display has {displayObj.transform.childCount} children:");
+            for (int i = 0; i < displayObj.transform.childCount; i++)
             {
-                matIcon.sprite = material.item.icon;
-                matIcon.enabled = true;
+                Transform child = displayObj.transform.GetChild(i);
+                Debug.Log($"  Child {i}: {child.name} - Components: {string.Join(", ", child.GetComponents<Component>().Select(c => c.GetType().Name))}");
             }
             
-            TextMeshProUGUI matText = displayObj.transform.Find("Amount")?.GetComponent<TextMeshProUGUI>();
-            if (matText != null)
+            // Find icon
+            Transform iconTransform = displayObj.transform.Find("Image");
+            Debug.Log($"Icon transform found: {iconTransform != null}");
+            
+            Image matIcon = null;
+            if (iconTransform != null)
+            {
+                matIcon = iconTransform.GetComponent<Image>();
+                Debug.Log($"Icon Image component found: {matIcon != null}");
+            }
+            
+            // Find texts
+            Transform nameTransform = displayObj.transform.Find("ItemName");
+            Transform amountTransform = displayObj.transform.Find("Amount");
+            Debug.Log($"ItemName found: {nameTransform != null}, Amount found: {amountTransform != null}");
+            
+            TextMeshProUGUI itemNameText = nameTransform?.GetComponent<TextMeshProUGUI>();
+            TextMeshProUGUI matAmountText = amountTransform?.GetComponent<TextMeshProUGUI>();
+            
+            // Set icon
+            if (matIcon != null)
+            {
+                if (material.item != null)
+                {
+                    if (material.item.icon != null)
+                    {
+                        matIcon.sprite = material.item.icon;
+                        matIcon.enabled = true;
+                        matIcon.color = Color.white;
+                        Debug.Log($"âœ“ Icon SET for {material.item.itemName}: {material.item.icon.name}");
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"âœ— Material {material.item.itemName} has NO ICON!");
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning("âœ— Material.item is NULL!");
+                }
+            }
+            else
+            {
+                Debug.LogWarning("âœ— matIcon component is NULL!");
+            }
+            
+            // Set item name
+            if (itemNameText != null && material.item != null)
+            {
+                itemNameText.text = material.item.itemName;
+                Debug.Log($"Set item name: {material.item.itemName}");
+            }
+            
+            // Set amount
+            if (matAmountText != null && material.item != null)
             {
                 int available = craftingSystem.inventorySystem.GetItemCount(material.item);
-                matText.text = $"{available}/{material.amount}";
-                
-                // Color red if not enough
-                matText.color = available >= material.amount ? Color.white : Color.red;
+                matAmountText.text = $"{available}/{material.amount}";
+                matAmountText.color = available >= material.amount ? Color.white : Color.red;
+                Debug.Log($"Set amount: {available}/{material.amount}");
             }
             
             spawnedMaterialDisplays.Add(displayObj);
+            index++;
         }
+        
+        Debug.Log("=== RECIPE SELECTION COMPLETE ===");
         
         // Update craft button
         UpdateCraftButton();

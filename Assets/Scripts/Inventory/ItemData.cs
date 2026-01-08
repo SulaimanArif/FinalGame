@@ -19,6 +19,18 @@ public class ItemData : ScriptableObject
     
     [Header("World Representation")]
     public GameObject worldPrefab; // The 3D model to spawn in world
+    
+    [Header("Food Properties")]
+    public bool isEdible = false;
+    public float hungerRestoreAmount = 20f;
+    public float healthRestoreAmount = 0f; // Optional: some food might heal too
+
+    [Header("Tool Properties (if Tool type)")]
+    public ToolData toolData; // Reference to tool data
+
+    // This will be set at runtime for each tool instance
+    [System.NonSerialized]
+    public ToolInstance toolInstance;
 }
 
 public enum ItemType

@@ -17,12 +17,16 @@ MonoBehaviour:
   heightMultiplier: 10
   heightOffset: 0
   vegetationPrefabs:
-  - {fileID: 4032642331417584291, guid: e133dac167ef59c40b7678ba58107c6a, type: 3}
-  - {fileID: 6846767348704259191, guid: 273b8f4150121d249ac7e2fd11da7005, type: 3}
-  - {fileID: 4500668923149335752, guid: a524090786e7ba545bd5ce3d24c9a3fb, type: 3}
-  - {fileID: 2636820298107493410, guid: a2bd798ea40c7e341aa61ad124d95342, type: 3}
-  - {fileID: 9154215057541871321, guid: 2554008d6447a2540b44e55f0c0b576e, type: 3}
-  - {fileID: 5637053553756167422, guid: f3b879d27bb99b948a6fafb39d01f19c, type: 3}
-  vegetationDensity: 0.15
+  - {fileID: 8328592796144810656, guid: c968d7b84101a0a41b89e6c77e7f61fe, type: 3}
+  - {fileID: 4606572056404561325, guid: 2160bc9ed7b20da49819a12ceee96963, type: 3}
+  - {fileID: 5181581655840035557, guid: 1ae2e0e031137db4282027ee4bb1c346, type: 3}
+  - {fileID: 6823089836209691417, guid: ce1f4891673b5d945993cf24b14ec8bf, type: 3}
+  - {fileID: 6939669266212593910, guid: 92bc602b2a73ecd4b877ed6cf872d5bb, type: 3}
+  - {fileID: 5468386175171068709, guid: 49e72cfbf9023e0418e11b59bf7fad7e, type: 3}
+  - {fileID: 8639561865084749964, guid: a8120115b742a584c8d21d5e1dafffb9, type: 3}
+  - {fileID: 7163554691020909686, guid: 853a5008edf76a84ab8366d9219882f4, type: 3}
+  - {fileID: 7143308486342404810, guid: c17a23538cfa8df498f5270a4e917c1c, type: 3}
+  - {fileID: 2354212892711803279, guid: 6c50e48f855268346bd6860c8c15d856, type: 3}
+  vegetationDensity: 0.297
   moistureMin: 0.5
   moistureMax: 1

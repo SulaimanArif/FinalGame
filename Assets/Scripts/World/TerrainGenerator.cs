@@ -141,7 +141,7 @@ public class TerrainGenerator : MonoBehaviour
         }
     }
 
-    void CreateTerrain(float[,] heightMap, float[,] moistureMap)
+     void CreateTerrain(float[,] heightMap, float[,] moistureMap)
     {
         terrainObject = new GameObject("Terrain");
         terrainObject.transform.parent = transform;
@@ -212,12 +212,59 @@ public class TerrainGenerator : MonoBehaviour
         
         return mesh;
     }
+    void SpawnGrass(float[,] moistureMap)
+    {
+        if (vegetationParent == null) return;
+        
+        int width = moistureMap.GetLength(0);
+        int height = moistureMap.GetLength(1);
+        
+        // Sample less frequently for grass patches
+        for (int y = 0; y < height; y += 1) // Adjust spacing
+        {
+            for (int x = 0; x < width; x += 1)
+            {
+                BiomeData biome = GetBiomeAtPosition(moistureMap[x, y]);
+                
+                if (biome != null && biome.grassPrefab != null)
+                {
+                    if (Random.value < biome.grassDensity)
+                    {
+                        SpawnGrassPatch(new Vector2(x, y), biome);
+                    }
+                }
+            }
+        }
+    }
+
+    void SpawnGrassPatch(Vector2 position, BiomeData biome)
+    {
+        // Spawn multiple grass blades in a small area
+        for (int i = 0; i < biome.grassPerPatch; i++)
+        {
+            Vector2 offset = Random.insideUnitCircle * biome.grassSpreadRadius;
+            Vector3 rayStart = new Vector3(position.x + offset.x, 100f, position.y + offset.y);
+            
+            RaycastHit hit;
+            if (Physics.Raycast(rayStart, Vector3.down, out hit, 200f, groundMask))
+            {
+                // Align grass with terrain normal
+                Quaternion rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
+                rotation *= Quaternion.Euler(0, Random.Range(0, 360), 0);
+                
+                GameObject grass = Instantiate(biome.grassPrefab, hit.point, rotation, vegetationParent);
+                float scale = Random.Range(0.8f, 1.2f);
+                grass.transform.localScale = new Vector3(scale, scale, scale);
+            }
+        }
+    }
 
     System.Collections.IEnumerator SpawnVegetationDelayed(float[,] moistureMap)
     {
         yield return new WaitForFixedUpdate();
         
         SpawnVegetation(moistureMap);
+        SpawnGrass(moistureMap);
     }
 
     void SpawnVegetation(float[,] moistureMap)

@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56a91b58d93995e48b84c9b670b52e17, type: 3}
+  m_Name: IronSword
+  m_EditorClassIdentifier: 
+  toolName: Sword
+  icon: {fileID: 21300000, guid: a36f24e9408f85e40aac4f87573d6e0e, type: 3}
+  description: Basic Sword that does decent damage.
+  baseDamage: 10
+  attackSpeed: 1
+  attackRange: 3
+  toolType: 4
+  hasDurability: 1
+  maxDurability: 5
+  currentDurability: 25
+  bonusDamageTargets:
+  - targetPrefab: {fileID: 491993309112202026, guid: 8d32e947fa6940749b16410f3e26f202, type: 3}
+    targetTag: 
+    bonusDamage: 30
+    targetName: Tiger
+  worldPrefab: {fileID: 1048507110318876310, guid: 4aae67d07f02a0a49a3489c7f78b5b89, type: 3}
+  swingSound: {fileID: 0}
+  hitSound: {fileID: 0}

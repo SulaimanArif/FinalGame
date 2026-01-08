@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46ea7398a0e127f459fbdd2bde7833bd, type: 3}
+  m_Name: Axe
+  m_EditorClassIdentifier: 
+  itemName: Axe
+  itemID: axe
+  description: used to chop trees more effectively
+  icon: {fileID: 21300000, guid: 31f7d5aaaaafead428303e4c5544dabf, type: 3}
+  isStackable: 0
+  maxStackSize: 99
+  itemType: 2
+  worldPrefab: {fileID: 8481775058816100195, guid: 92526ab89a9a4b042adc9f54097cd99e, type: 3}
+  isEdible: 0
+  hungerRestoreAmount: 20
+  healthRestoreAmount: 0
+  toolData: {fileID: 11400000, guid: ac10fd27511a7e648bf3b069939bd6fe, type: 2}

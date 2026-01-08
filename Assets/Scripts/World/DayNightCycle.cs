@@ -93,21 +93,17 @@ public class DayNightCycle : MonoBehaviour
             float moonAngle = sunAngle + 180f;
             moonLight.transform.rotation = Quaternion.Euler(moonAngle, 170f, 0f);
             
-            // Moon is visible when sun is below horizon
-            bool isNightTime = sunAngle < -90f || sunAngle > 90f;
+            // More reliable night check based on timeOfDay
+            bool isNightTime = timeOfDay < 0.25f || timeOfDay > 0.75f;
             
             if (isNightTime)
             {
-                // Keep moon at full brightness all night
                 hdMoonLightData.SetIntensity(moonIntensity);
                 moonLight.enabled = true;
-                
-                Debug.Log($"NIGHT - SunAngle:{sunAngle:F0} MoonAngle:{moonAngle:F0} MoonIntensity:{moonIntensity:F0}");
             }
             else
             {
                 moonLight.enabled = false;
-                Debug.Log($"DAY - SunAngle:{sunAngle:F0} Moon disabled");
             }
             
             hdMoonLightData.SetColor(moonColor, moonColorTemperature);
