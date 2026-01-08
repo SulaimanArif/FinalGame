@@ -25,7 +25,7 @@ public class AIBehavior : MonoBehaviour
     public float moveSpeed = 3.5f;
     public float rotationSpeed = 5f;
     public bool useCreatureMover = false;
-    public float gravity = -9.81f; // Gravity for CharacterController
+    public float gravity = -9.81f; 
     
     [Header("Wandering Behavior")]
     public bool enableWandering = true;
@@ -50,9 +50,8 @@ public class AIBehavior : MonoBehaviour
     [Header("Animation")]
     public Animator animator;
     public bool useAnimations = true;
-    public bool useCreatureMoverAnimations = false; // Use Vert/State instead of IsWalking/Speed
+    public bool useCreatureMoverAnimations = false; 
     
-    // Standard animation parameter names
     private static readonly int IsWalkingHash = Animator.StringToHash("IsWalking");
     private static readonly int IsRunningHash = Animator.StringToHash("IsRunning");
     private static readonly int IsGrazingHash = Animator.StringToHash("IsGrazing");
@@ -60,7 +59,6 @@ public class AIBehavior : MonoBehaviour
     private static readonly int DeathTriggerHash = Animator.StringToHash("Death");
     private static readonly int SpeedHash = Animator.StringToHash("Speed");
     
-    // CreatureMover animation parameter names
     private static readonly int VertHash = Animator.StringToHash("Vert");
     private static readonly int StateHash = Animator.StringToHash("State");
     
@@ -73,13 +71,11 @@ public class AIBehavior : MonoBehaviour
     private Health health;
     private AIState currentState = AIState.Idle;
     
-    // Wandering
     private Vector3 spawnPoint;
     private Vector3 wanderTarget;
     private float stateTimer;
     private Vector3 verticalVelocity; // For gravity
     
-    // CreatureMover support
     private Controller.CreatureMover creatureMover;
     private CharacterController characterController;
     
@@ -93,7 +89,7 @@ public class AIBehavior : MonoBehaviour
         if (creatureMover != null)
         {
             useCreatureMover = true;
-            useCreatureMoverAnimations = true; // Auto-detect CreatureMover animations
+            useCreatureMoverAnimations = true; 
         }
         
         if (animator == null)
@@ -127,12 +123,11 @@ public class AIBehavior : MonoBehaviour
     {
         if (player == null || health.IsDead()) return;
         
-        // Apply gravity to CharacterController
         if (characterController != null && !useCreatureMover)
         {
             if (characterController.isGrounded && verticalVelocity.y < 0)
             {
-                verticalVelocity.y = -2f; // Small downward force to keep grounded
+                verticalVelocity.y = -2f;
             }
             else
             {
@@ -144,7 +139,6 @@ public class AIBehavior : MonoBehaviour
         
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
         
-        // Update flee timer
         if (isFleeing)
         {
             fleeTimer -= Time.deltaTime;
@@ -154,7 +148,6 @@ public class AIBehavior : MonoBehaviour
             }
         }
         
-        // Passive AI flees when attacked
         if (aggroType == AggroType.Passive && isFleeing)
         {
             SetState(AIState.Fleeing);
@@ -163,7 +156,6 @@ public class AIBehavior : MonoBehaviour
             return;
         }
         
-        // Determine if should be aggro
         switch (aggroType)
         {
             case AggroType.Passive:
@@ -184,8 +176,7 @@ public class AIBehavior : MonoBehaviour
                 }
                 break;
         }
-        
-        // Behavior based on aggro state
+
         if (isAggro)
         {
             if (distanceToPlayer <= attackRange)
@@ -206,7 +197,6 @@ public class AIBehavior : MonoBehaviour
         }
         else
         {
-            // Wandering behavior when not aggro
             if (enableWandering)
             {
                 UpdateWandering();
@@ -234,7 +224,6 @@ public class AIBehavior : MonoBehaviour
         {
             case AIState.Idle:
             case AIState.Grazing:
-                // Stop all movement when idle/grazing
                 if (useCreatureMover && creatureMover != null)
                 {
                     creatureMover.SetInput(Vector2.zero, transform.position + transform.forward, false, false);
@@ -253,10 +242,8 @@ public class AIBehavior : MonoBehaviour
     
     void StartNewWanderState()
     {
-        // Randomly decide next state
         if (currentState == AIState.Wandering)
         {
-            // After wandering, go idle or graze
             if (canGraze && Random.value < grazeChance)
             {
                 SetState(AIState.Grazing);
@@ -270,10 +257,8 @@ public class AIBehavior : MonoBehaviour
         }
         else
         {
-            // After idle/grazing, start wandering
             SetState(AIState.Wandering);
             
-            // Pick random point within wander radius of spawn point
             Vector2 randomCircle = Random.insideUnitCircle * wanderRadius;
             wanderTarget = spawnPoint + new Vector3(randomCircle.x, 0, randomCircle.y);
             stateTimer = Random.Range(minWanderTime, maxWanderTime);
@@ -323,7 +308,6 @@ public class AIBehavior : MonoBehaviour
             transform.position += direction * wanderSpeed * Time.deltaTime;
         }
         
-        // Check if reached target
         float distanceToTarget = Vector3.Distance(transform.position, wanderTarget);
         if (distanceToTarget < 1f)
         {
@@ -485,8 +469,6 @@ public class AIBehavior : MonoBehaviour
                     }
                 }
             }
-            
-            Debug.Log($"{gameObject.name} attacked player for {attackDamage} damage!");
         }
     }
     
@@ -496,9 +478,8 @@ public class AIBehavior : MonoBehaviour
         
         if (useCreatureMoverAnimations)
         {
-            // Use CreatureMover's Vert/State system
-            float vert = 0f; // Movement magnitude (0-1)
-            float state = 0f; // 0 = walk, 1 = run
+            float vert = 0f;
+            float state = 0f;
             
             switch (currentState)
             {
@@ -509,14 +490,14 @@ public class AIBehavior : MonoBehaviour
                     break;
                     
                 case AIState.Wandering:
-                    vert = 0.5f; // Slow walk
-                    state = 0f; // Walking
+                    vert = 0.5f;
+                    state = 0f;
                     break;
                     
                 case AIState.Chasing:
                 case AIState.Fleeing:
-                    vert = 1f; // Full speed
-                    state = 1f; // Running
+                    vert = 1f;
+                    state = 1f;
                     break;
                     
                 case AIState.Attacking:
@@ -527,13 +508,11 @@ public class AIBehavior : MonoBehaviour
             
             animator.SetFloat(VertHash, vert);
             animator.SetFloat(StateHash, state);
-            
-            // Handle grazing if parameter exists
+   
             SetAnimatorBoolIfExists(IsGrazingHash, currentState == AIState.Grazing);
         }
         else
         {
-            // Use standard IsWalking/Speed system
             float normalizedSpeed = 0f;
             bool isGrazing = false;
             bool isWalking = false;
@@ -621,11 +600,6 @@ public class AIBehavior : MonoBehaviour
         }
     }
     
-    public void OnAttackHit()
-    {
-        Debug.Log("Attack animation hit frame!");
-    }
-    
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
@@ -634,7 +608,6 @@ public class AIBehavior : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRange);
         
-        // Draw building attack range
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, buildingAttackRange);
         

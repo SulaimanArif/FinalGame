@@ -23,9 +23,9 @@ public class BiomeData : ScriptableObject
     public float moistureMax = 1f;
 
     [Header("Grass")]
-    public GameObject grassPrefab; // A simple grass blade mesh
+    public GameObject grassPrefab;
     [Range(0f, 1f)]
     public float grassDensity = 0.3f;
-    public int grassPerPatch = 5; // How many grass blades per spawn point
-    public float grassSpreadRadius = 0.5f; // Spread within each patch
+    public int grassPerPatch = 5;
+    public float grassSpreadRadius = 0.5f; 
 }

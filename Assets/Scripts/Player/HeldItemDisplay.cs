@@ -3,11 +3,11 @@ using UnityEngine;
 public class HeldItemDisplay : MonoBehaviour
 {
     [Header("References")]
-    public Transform itemHoldPosition; // Position in front of camera
+    public Transform itemHoldPosition; 
     public Camera playerCamera;
     
     [Header("Settings")]
-    public Vector3 holdPositionOffset = new Vector3(0.5f, -0.3f, 0.8f); // Right, Down, Forward
+    public Vector3 holdPositionOffset = new Vector3(0.5f, -0.3f, 0.8f); 
     public Vector3 holdRotationOffset = new Vector3(0f, -90f, 0f);
     public float itemScale = 0.5f;
     
@@ -27,7 +27,6 @@ public class HeldItemDisplay : MonoBehaviour
             playerCamera = Camera.main;
         }
         
-        // Create hold position if it doesn't exist
         if (itemHoldPosition == null)
         {
             GameObject holdPosObj = new GameObject("ItemHoldPosition");
@@ -44,7 +43,6 @@ public class HeldItemDisplay : MonoBehaviour
     {
         if (currentHeldItem != null && enableBobbing)
         {
-            // Bobbing animation
             float bobOffset = Mathf.Sin(Time.time * bobSpeed) * bobAmount;
             itemHoldPosition.localPosition = originalPosition + new Vector3(0, bobOffset, 0);
         }
@@ -58,18 +56,15 @@ public class HeldItemDisplay : MonoBehaviour
             return;
         }
         
-        // If same item, don't recreate
         if (currentItemData == itemData && currentHeldItem != null)
         {
             return;
         }
         
-        // Clear previous item
         HideItem();
         
         currentItemData = itemData;
         
-        // Spawn the item's world prefab
         if (itemData.worldPrefab != null)
         {
             currentHeldItem = Instantiate(itemData.worldPrefab, itemHoldPosition);
@@ -77,11 +72,9 @@ public class HeldItemDisplay : MonoBehaviour
             currentHeldItem.transform.localRotation = Quaternion.identity;
             currentHeldItem.transform.localScale = Vector3.one * itemScale;
             
-            // Remove WorldItem script FIRST (it has RequireComponent dependencies)
             WorldItem worldItem = currentHeldItem.GetComponent<WorldItem>();
             if (worldItem != null) Destroy(worldItem);
             
-            // Now we can safely remove physics components
             Rigidbody rb = currentHeldItem.GetComponent<Rigidbody>();
             if (rb != null) Destroy(rb);
             
@@ -91,14 +84,7 @@ public class HeldItemDisplay : MonoBehaviour
                 if (col != null) Destroy(col);
             }
             
-            // Set layer to avoid raycast issues
             SetLayerRecursively(currentHeldItem, LayerMask.NameToLayer("Ignore Raycast"));
-            
-            Debug.Log($"Now holding: {itemData.itemName}");
-        }
-        else
-        {
-            Debug.LogWarning($"Item {itemData.itemName} has no world prefab to display!");
         }
     }
     

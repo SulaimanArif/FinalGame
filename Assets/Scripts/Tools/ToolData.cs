@@ -11,7 +11,7 @@ public class ToolData : ScriptableObject
     
     [Header("Base Stats")]
     public float baseDamage = 10f;
-    public float attackSpeed = 1f; // Attacks per second
+    public float attackSpeed = 1f;
     public float attackRange = 3f;
     
     [Header("Tool Type")]
@@ -28,75 +28,56 @@ public class ToolData : ScriptableObject
     public BonusDamageTarget[] bonusDamageTargets;
     
     [Header("Visual/Audio")]
-    public GameObject worldPrefab; // 3D model for holding
+    public GameObject worldPrefab;
     public AudioClip swingSound;
     public AudioClip hitSound;
     
     void OnEnable()
     {
-        // Initialize durability
         currentDurability = maxDurability;
     }
     
-    /// <summary>
-    /// Calculate damage against a specific target
-    /// </summary>
     public float CalculateDamage(GameObject target)
     {
         if (target == null) return baseDamage;
         
         float totalDamage = baseDamage;
         
-        // Check if target matches any bonus damage targets
         foreach (BonusDamageTarget bonusTarget in bonusDamageTargets)
         {
             if (bonusTarget.targetPrefab == null) continue;
             
-            // Check if the hit object matches the bonus target prefab
-            // This works for instantiated prefabs
             if (IsPrefabMatch(target, bonusTarget.targetPrefab))
             {
                 totalDamage += bonusTarget.bonusDamage;
                 
-                Debug.Log($"{toolName} hit {target.name}: Base({baseDamage}) + Bonus({bonusTarget.bonusDamage}) = {totalDamage}");
                 return totalDamage;
             }
             
-            // Also check by tag if specified
             if (!string.IsNullOrEmpty(bonusTarget.targetTag) && target.CompareTag(bonusTarget.targetTag))
             {
                 totalDamage += bonusTarget.bonusDamage;
                 
-                Debug.Log($"{toolName} hit {target.name} by tag: Base({baseDamage}) + Bonus({bonusTarget.bonusDamage}) = {totalDamage}");
                 return totalDamage;
             }
         }
         
-        Debug.Log($"{toolName} hit {target.name}: {baseDamage} (no bonus)");
         return totalDamage;
     }
     
-    /// <summary>
-    /// Check if a GameObject instance matches a prefab
-    /// </summary>
     bool IsPrefabMatch(GameObject instance, GameObject prefab)
     {
         #if UNITY_EDITOR
-        // In editor, check prefab connection
         GameObject prefabRoot = UnityEditor.PrefabUtility.GetCorrespondingObjectFromSource(instance);
         if (prefabRoot == prefab) return true;
         #endif
         
-        // Fallback: Check by name (less reliable but works at runtime)
         string instanceName = instance.name.Replace("(Clone)", "").Trim();
         string prefabName = prefab.name;
         
         return instanceName == prefabName;
     }
     
-    /// <summary>
-    /// Reduce durability after use
-    /// </summary>
     public void UseTool()
     {
         if (!hasDurability) return;
@@ -106,13 +87,9 @@ public class ToolData : ScriptableObject
         if (currentDurability <= 0)
         {
             currentDurability = 0;
-            Debug.Log($"{toolName} broke!");
         }
     }
     
-    /// <summary>
-    /// Repair the tool
-    /// </summary>
     public void Repair(int amount)
     {
         if (!hasDurability) return;
@@ -120,17 +97,11 @@ public class ToolData : ScriptableObject
         currentDurability = Mathf.Min(currentDurability + amount, maxDurability);
     }
     
-    /// <summary>
-    /// Check if tool is broken
-    /// </summary>
     public bool IsBroken()
     {
         return hasDurability && currentDurability <= 0;
     }
     
-    /// <summary>
-    /// Get durability as percentage
-    /// </summary>
     public float GetDurabilityPercent()
     {
         if (!hasDurability) return 1f;

@@ -42,23 +42,11 @@ public class DayNightCycle : MonoBehaviour
         if (sunLight != null)
         {
             hdSunLightData = sunLight.GetComponent<HDAdditionalLightData>();
-            if (hdSunLightData == null)
-            {
-                Debug.LogError("Sun Light is missing HDAdditionalLightData component!");
-            }
         }
         
         if (moonLight != null)
         {
             hdMoonLightData = moonLight.GetComponent<HDAdditionalLightData>();
-            if (hdMoonLightData == null)
-            {
-                Debug.LogError("Moon Light is missing HDAdditionalLightData component!");
-            }
-        }
-        else
-        {
-            Debug.LogWarning("Moon Light is not assigned to DayNightCycle!");
         }
         
         if (skyVolume != null && skyVolume.profile.TryGet(out exposureOverride))
@@ -93,7 +81,6 @@ public class DayNightCycle : MonoBehaviour
             float moonAngle = sunAngle + 180f;
             moonLight.transform.rotation = Quaternion.Euler(moonAngle, 170f, 0f);
             
-            // More reliable night check based on timeOfDay
             bool isNightTime = timeOfDay < 0.25f || timeOfDay > 0.75f;
             
             if (isNightTime)
@@ -184,4 +171,4 @@ public class DayNightCycle : MonoBehaviour
     {
         timeOfDay = Mathf.Clamp01(time);
     }
-}
+} 

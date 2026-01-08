@@ -15,27 +15,22 @@ public class PlayerLook : MonoBehaviour
     
     void Awake()
     {
-        // Initialize input actions
         playerInputActions = new PlayerInputActions();
     }
     
     void OnEnable()
     {
-        // Enable input actions
         playerInputActions.Player.Enable();
         
-        // Subscribe to look input
         playerInputActions.Player.Look.performed += OnLookPerformed;
         playerInputActions.Player.Look.canceled += OnLookCanceled;
     }
     
     void OnDisable()
     {
-        // Unsubscribe from look input
         playerInputActions.Player.Look.performed -= OnLookPerformed;
         playerInputActions.Player.Look.canceled -= OnLookCanceled;
         
-        // Disable input actions
         playerInputActions.Player.Disable();
     }
     
@@ -46,21 +41,17 @@ public class PlayerLook : MonoBehaviour
     
     void Update()
     {
-        // Apply mouse sensitivity and delta time scaling
         float mouseX = lookInput.x * mouseSensitivity * Time.deltaTime;
         float mouseY = lookInput.y * mouseSensitivity * Time.deltaTime;
         
-        // Vertical rotation (pitch)
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
         
         transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
         
-        // Horizontal rotation (yaw)
         playerBody.Rotate(Vector3.up * mouseX);
     }
     
-    // Input callbacks
     private void OnLookPerformed(InputAction.CallbackContext context)
     {
         lookInput = context.ReadValue<Vector2>();

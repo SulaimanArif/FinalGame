@@ -6,28 +6,27 @@ public class PlayerStats : MonoBehaviour
     [Header("Health Settings")]
     [SerializeField] private float maxHealth = 100f;
     [SerializeField] private float currentHealth = 100f;
-    [SerializeField] private float healthRegenRate = 5f; // HP per second
-    [SerializeField] private float healthRegenDelay = 3f; // Seconds after damage
+    [SerializeField] private float healthRegenRate = 5f; 
+    [SerializeField] private float healthRegenDelay = 3f; 
     
     [Header("Hunger Settings")]
     [SerializeField] private float maxHunger = 100f;
     [SerializeField] private float currentHunger = 100f;
-    [SerializeField] private float hungerDepletionRate = 1f; // Per second
-    [SerializeField] private float hungerDamageRate = 2f; // HP per second when hunger is 0
-    [SerializeField] private float hungerRegenThreshold = 50f; // Hunger needed for health regen
+    [SerializeField] private float hungerDepletionRate = 1f; 
+    [SerializeField] private float hungerDamageRate = 2f; 
+    [SerializeField] private float hungerRegenThreshold = 50f; 
     
     [Header("Events")]
-    public UnityEvent<float, float> OnHealthChanged; // current, max
-    public UnityEvent<float, float> OnHungerChanged; // current, max
+    public UnityEvent<float, float> OnHealthChanged; 
+    public UnityEvent<float, float> OnHungerChanged; 
     public UnityEvent OnPlayerDeath;
     
     [Header("References")]
-    [SerializeField] private PlayerLook playerLook; // Reference to camera's PlayerLook
+    [SerializeField] private PlayerLook playerLook;
     
     private float timeSinceLastDamage = 0f;
     private bool isDead = false;
     
-    // Properties
     public float Health => currentHealth;
     public float MaxHealth => maxHealth;
     public float HealthPercentage => currentHealth / maxHealth;
@@ -40,17 +39,14 @@ public class PlayerStats : MonoBehaviour
     
     void Start()
     {
-        // Initialize stats
         currentHealth = maxHealth;
         currentHunger = maxHunger;
         
-        // Auto-find PlayerLook if not assigned
         if (playerLook == null)
         {
             playerLook = GetComponentInChildren<PlayerLook>();
         }
         
-        // Trigger initial UI update
         OnHealthChanged?.Invoke(currentHealth, maxHealth);
         OnHungerChanged?.Invoke(currentHunger, maxHunger);
     }
@@ -59,18 +55,15 @@ public class PlayerStats : MonoBehaviour
     {
         if (isDead) return;
         
-        // Deplete hunger over time
         DepleteHunger(hungerDepletionRate * Time.deltaTime);
         
-        // Handle hunger effects
         if (currentHunger <= 0)
         {
-            // Take damage from starvation
             TakeDamage(hungerDamageRate * Time.deltaTime, true);
         }
         else if (currentHunger >= hungerRegenThreshold)
         {
-            // Regenerate health if hunger is sufficient
+
             timeSinceLastDamage += Time.deltaTime;
             
             if (timeSinceLastDamage >= healthRegenDelay)
@@ -87,7 +80,6 @@ public class PlayerStats : MonoBehaviour
         currentHealth -= damage;
         currentHealth = Mathf.Max(0, currentHealth);
         
-        // Reset regen timer unless it's from hunger
         if (!bypassRegenDelay)
         {
             timeSinceLastDamage = 0f;
@@ -135,15 +127,12 @@ public class PlayerStats : MonoBehaviour
     {
         isDead = true;
         OnPlayerDeath?.Invoke();
-        Debug.Log("Player has died!");
         
-        // Disable player controls
         PlayerController controller = GetComponent<PlayerController>();
         if (controller != null) controller.enabled = false;
         
         if (playerLook != null) playerLook.enabled = false;
         
-        // Unlock cursor
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
@@ -158,18 +147,15 @@ public class PlayerStats : MonoBehaviour
         OnHealthChanged?.Invoke(currentHealth, maxHealth);
         OnHungerChanged?.Invoke(currentHunger, maxHunger);
         
-        // Re-enable player controls
         PlayerController controller = GetComponent<PlayerController>();
         if (controller != null) controller.enabled = true;
         
         if (playerLook != null) playerLook.enabled = true;
         
-        // Lock cursor
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
     
-    // Public methods for testing
     public void TestDamage() 
     { 
         TakeDamage(10f); 

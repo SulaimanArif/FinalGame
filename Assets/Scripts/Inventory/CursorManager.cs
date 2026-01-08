@@ -5,11 +5,7 @@ public class CursorManager : MonoBehaviour
     public static CursorManager Instance { get; private set; }
     
     [Header("Settings")]
-    
     public bool lockOnStart = true;
-    
-    [Header("Debug")]
-    public bool showDebugLogs = true;
     
     private bool isLocked = false;
     
@@ -19,18 +15,9 @@ public class CursorManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            
-            if (showDebugLogs)
-            {
-                Debug.Log("[CursorManager] Instance created");
-            }
         }
         else
         {
-            if (showDebugLogs)
-            {
-                Debug.Log("[CursorManager] Instance created");
-            }
             Destroy(gameObject);
             return;
         }
@@ -49,11 +36,6 @@ public class CursorManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         isLocked = true;
-        
-        if (showDebugLogs)
-        {
-            Debug.Log("[CursorManager] Cursor LOCKED - Gameplay mode");
-        }
     }
     
     public void UnlockCursor()
@@ -61,11 +43,6 @@ public class CursorManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         isLocked = false;
-        
-        if (showDebugLogs)
-        {
-            Debug.Log("[CursorManager] Cursor UNLOCKED - UI mode");
-        }
     }
     
     public void ToggleCursor()

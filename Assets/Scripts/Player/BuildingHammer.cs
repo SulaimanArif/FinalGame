@@ -1,9 +1,5 @@
 using UnityEngine;
 
-/// <summary>
-/// Building Hammer tool that activates build mode when equipped
-/// Add this component to the Player GameObject
-/// </summary>
 public class BuildingHammer : MonoBehaviour
 {
     [Header("References")]
@@ -11,10 +7,7 @@ public class BuildingHammer : MonoBehaviour
     public HeldItemDisplay heldItemDisplay;
     
     [Header("Hammer Item")]
-    public ItemData hammerItem; // Assign your hammer ItemData
-    
-    [Header("Debug")]
-    public bool showDebugInfo = true;
+    public ItemData hammerItem; 
     
     private bool isHammerEquipped = false;
     private ItemData currentlyEquippedItem = null;
@@ -38,7 +31,6 @@ public class BuildingHammer : MonoBehaviour
     
     void Start()
     {
-        // Make sure build mode starts deactivated
         if (buildingSystem != null)
         {
             if (buildingSystem.isBuildModeActive)
@@ -57,15 +49,12 @@ public class BuildingHammer : MonoBehaviour
     {
         if (heldItemDisplay == null || hammerItem == null) return;
         
-        // Get currently held item
         ItemData heldItem = heldItemDisplay.GetCurrentItem();
         
-        // Check if equipped item changed
         if (heldItem != currentlyEquippedItem)
         {
             currentlyEquippedItem = heldItem;
             
-            // Check if it's the hammer
             if (heldItem == hammerItem)
             {
                 EquipHammer();
@@ -83,15 +72,9 @@ public class BuildingHammer : MonoBehaviour
         
         isHammerEquipped = true;
         
-        // Activate build mode
         if (buildingSystem != null && !buildingSystem.isBuildModeActive)
         {
             buildingSystem.ToggleBuildMode();
-            
-            if (showDebugInfo)
-            {
-                Debug.Log("ðŸ”¨ Hammer equipped - Build mode ACTIVATED");
-            }
         }
     }
     
@@ -101,25 +84,17 @@ public class BuildingHammer : MonoBehaviour
         
         isHammerEquipped = false;
         
-        // Deactivate build mode
         if (buildingSystem != null && buildingSystem.isBuildModeActive)
         {
             buildingSystem.ToggleBuildMode();
-            
-            if (showDebugInfo)
-            {
-                Debug.Log("ðŸ”¨ Hammer unequipped - Build mode DEACTIVATED");
-            }
         }
     }
     
-    // Public method to check if hammer is equipped (useful for other systems)
     public bool IsHammerEquipped()
     {
         return isHammerEquipped;
     }
     
-    // Force unequip (e.g., when player dies or enters combat)
     public void ForceUnequip()
     {
         if (heldItemDisplay != null)

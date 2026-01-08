@@ -21,7 +21,6 @@ public class CraftingSystem : MonoBehaviour
             inventorySystem = GetComponent<InventorySystem>();
         }
         
-        // Listen for inventory changes to update recipe availability
         if (inventorySystem != null)
         {
             inventorySystem.OnInventoryChanged.AddListener(OnInventoryChanged);

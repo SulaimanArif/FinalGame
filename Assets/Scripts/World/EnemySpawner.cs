@@ -17,18 +17,18 @@ public class EnemySpawner : MonoBehaviour
     
     [Header("Spawn Settings")]
     public EnemySpawnData[] enemySpawns;
-    public float spawnCheckInterval = 10f; // Check less frequently than animals
+    public float spawnCheckInterval = 10f; 
     public float despawnDistance = 120f;
-    public float minSpawnDistance = 50f; // Don't spawn too close to player
-    public float maxSpawnDistance = 100f; // Don't spawn too far
+    public float minSpawnDistance = 50f;
+    public float maxSpawnDistance = 100f; 
     
     [Header("Night Spawning")]
     public DayNightCycle dayNightCycle;
     public bool onlySpawnAtNight = true;
     [Range(0f, 1f)]
-    public float nightStartTime = 0.75f; // When night begins (0.75 = 6pm)
+    public float nightStartTime = 0.75f; 
     [Range(0f, 1f)]
-    public float nightEndTime = 0.25f; // When night ends (0.25 = 6am)
+    public float nightEndTime = 0.25f; 
     
     [Header("Population Limits")]
     public int maxEnemiesPerBiomeUnit = 3;
@@ -38,10 +38,7 @@ public class EnemySpawner : MonoBehaviour
     public Transform player;
     public TerrainGenerator terrainGenerator;
     public LayerMask groundMask;
-    public GameProgressionSystem progressionSystem; // NEW
-    
-    [Header("Debug")]
-    public bool showDebugInfo = true;
+    public GameProgressionSystem progressionSystem; 
     
     private List<GameObject> spawnedEnemies = new List<GameObject>();
     private float nextSpawnCheckTime = 0f;
@@ -88,24 +85,7 @@ public class EnemySpawner : MonoBehaviour
             }
         }
         
-        // Check for night transition
         bool isNight = IsNightTime();
-        if (isNight && !wasNight)
-        {
-            // Just became night
-            if (showDebugInfo)
-            {
-                Debug.Log("Night has fallen - enemies will spawn!");
-            }
-        }
-        else if (!isNight && wasNight)
-        {
-            // Just became day
-            if (showDebugInfo)
-            {
-                Debug.Log("Day has come - no more enemy spawns");
-            }
-        }
         wasNight = isNight;
     }
     
@@ -121,11 +101,10 @@ public class EnemySpawner : MonoBehaviour
     
     bool IsNightTime()
     {
-        if (dayNightCycle == null) return true; // Always spawn if no day/night cycle
+        if (dayNightCycle == null) return true; 
         
         float timeOfDay = dayNightCycle.GetTimeOfDay();
         
-        // Night wraps around midnight (e.g., 0.75 to 1.0, then 0.0 to 0.25)
         if (nightStartTime > nightEndTime)
         {
             return timeOfDay >= nightStartTime || timeOfDay <= nightEndTime;
@@ -173,11 +152,6 @@ public class EnemySpawner : MonoBehaviour
         {
             biomeAreas[kvp.Key] = kvp.Value * cellArea;
             biomeEnemyCounts[kvp.Key] = 0;
-            
-            if (showDebugInfo)
-            {
-                Debug.Log($"Biome {kvp.Key.biomeName}: Area = {biomeAreas[kvp.Key]} unitsÂ²");
-            }
         }
     }
     
@@ -189,8 +163,6 @@ public class EnemySpawner : MonoBehaviour
         
         if (spawnedEnemies.Count >= globalMaxEnemies)
         {
-            if (showDebugInfo)
-                Debug.Log("Global enemy limit reached");
             return;
         }
         
@@ -198,12 +170,10 @@ public class EnemySpawner : MonoBehaviour
         
         for (int i = 0; i < spawnAttempts; i++)
         {
-            // Random position in a ring around player (not too close, not too far)
             Vector2 randomCircle = Random.insideUnitCircle.normalized;
             float distance = Random.Range(minSpawnDistance, maxSpawnDistance);
             Vector3 spawnPos = player.position + new Vector3(randomCircle.x * distance, 0, randomCircle.y * distance);
             
-            // Make sure it's not too close to player
             float distToPlayer = Vector3.Distance(spawnPos, player.position);
             if (distToPlayer < minSpawnDistance)
             {
@@ -229,39 +199,21 @@ public class EnemySpawner : MonoBehaviour
     {
         List<EnemySpawnData> validSpawns = new List<EnemySpawnData>();
         
-        if (showDebugInfo)
-        {
-            Debug.Log($"=== Trying to spawn enemy in biome: {biome?.biomeName ?? "NULL"} ===");
-        }
-        
         foreach (EnemySpawnData spawnData in enemySpawns)
         {
             if (spawnData.biome == biome && Random.value <= spawnData.spawnChance)
             {
                 validSpawns.Add(spawnData);
-                if (showDebugInfo)
-                {
-                    Debug.Log($"âœ“ Valid enemy spawn found: {spawnData.enemyPrefab.name}");
-                }
             }
         }
         
         if (validSpawns.Count == 0)
         {
-            if (showDebugInfo)
-            {
-                Debug.Log($"âœ— No valid enemy spawns for biome: {biome?.biomeName}");
-            }
             return;
         }
         
         EnemySpawnData selectedSpawn = validSpawns[Random.Range(0, validSpawns.Count)];
         int groupSize = Random.Range(selectedSpawn.minGroupSize, selectedSpawn.maxGroupSize + 1);
-        
-        if (showDebugInfo)
-        {
-            Debug.Log($"Spawning group of {groupSize} {selectedSpawn.enemyPrefab.name}");
-        }
         
         for (int i = 0; i < groupSize; i++)
         {
@@ -276,7 +228,6 @@ public class EnemySpawner : MonoBehaviour
             
             Vector3 spawnPos = position + offset;
             
-            // Final check: not too close to player
             if (Vector3.Distance(spawnPos, player.position) < minSpawnDistance)
             {
                 continue;
@@ -287,13 +238,11 @@ public class EnemySpawner : MonoBehaviour
             {
                 GameObject enemy = Instantiate(selectedSpawn.enemyPrefab, hit.point, Quaternion.Euler(0, Random.Range(0, 360), 0));
                 
-                // Apply difficulty scaling if progression system exists
                 if (progressionSystem != null)
                 {
                     progressionSystem.ApplyScalingToEnemy(enemy);
                 }
                 
-                // Tag enemy so progression system can find it
                 if (!enemy.CompareTag("Enemy"))
                 {
                     enemy.tag = "Enemy";
@@ -304,11 +253,6 @@ public class EnemySpawner : MonoBehaviour
                 if (biomeEnemyCounts.ContainsKey(biome))
                 {
                     biomeEnemyCounts[biome]++;
-                }
-                
-                if (showDebugInfo && i == 0)
-                {
-                    Debug.Log($"âœ“ Spawned {selectedSpawn.enemyPrefab.name} at {hit.point} in {biome.biomeName}");
                 }
             }
         }
@@ -339,9 +283,6 @@ public class EnemySpawner : MonoBehaviour
                 
                 Destroy(spawnedEnemies[i]);
                 spawnedEnemies.RemoveAt(i);
-                
-                if (showDebugInfo)
-                    Debug.Log($"Despawned enemy (too far)");
             }
         }
     }
@@ -405,14 +346,8 @@ public class EnemySpawner : MonoBehaviour
         return terrainGenerator.biomes.Length > 0 ? terrainGenerator.biomes[0] : null;
     }
     
-    // Force cleanup all enemies (useful for day transition)
     public void DespawnAllEnemies()
     {
-        if (showDebugInfo)
-        {
-            Debug.Log($"Despawning all {spawnedEnemies.Count} enemies");
-        }
-        
         foreach (GameObject enemy in spawnedEnemies)
         {
             if (enemy != null)
@@ -433,30 +368,13 @@ public class EnemySpawner : MonoBehaviour
     {
         if (player == null) return;
         
-        // Draw min spawn distance (safe zone)
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(player.position, minSpawnDistance);
         
-        // Draw max spawn distance
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(player.position, maxSpawnDistance);
         
-        // Draw despawn distance
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(player.position, despawnDistance);
-    }
-    
-    void OnGUI()
-    {
-        if (showDebugInfo)
-        {
-            GUI.Label(new Rect(10, 100, 300, 20), $"Enemies: {spawnedEnemies.Count}/{globalMaxEnemies}");
-            GUI.Label(new Rect(10, 120, 300, 20), $"Night: {IsNightTime()}");
-            
-            if (dayNightCycle != null)
-            {
-                GUI.Label(new Rect(10, 140, 300, 20), $"Time: {dayNightCycle.GetTimeOfDay():F2}");
-            }
-        }
     }
 }

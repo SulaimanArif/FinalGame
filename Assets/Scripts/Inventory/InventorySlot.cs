@@ -19,7 +19,6 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     private Canvas canvas;
     private InventoryUI inventoryUI;
     
-    // Drag data
     private GameObject draggedIcon;
     private RectTransform draggedRectTransform;
     private CanvasGroup draggedCanvasGroup;
@@ -28,13 +27,7 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         canvas = GetComponentInParent<Canvas>();
         
-        // InventoryUI is not in parent hierarchy, so find it in scene
         inventoryUI = FindObjectOfType<InventoryUI>();
-        
-        if (inventoryUI == null)
-        {
-            Debug.LogError("InventoryUI not found in scene!");
-        }
     }
     
     public void Setup(int x, int y)
@@ -92,37 +85,27 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         }
     }
     
-    // Pointer Click - Select item or unequip
     public void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log($"=== SLOT CLICKED === Position: ({slotX}, {slotY}), Item: {currentItem?.itemName ?? "EMPTY"}");
-        
         if (inventoryUI == null)
         {
-            Debug.LogError("InventoryUI is NULL!");
             return;
         }
         
         if (currentItem != null)
         {
-            Debug.Log("Selecting item...");
             inventoryUI.SelectItem(this);
         }
         else
         {
-            Debug.Log("Unequipping item...");
             inventoryUI.UnequipItem();
         }
     }
     
-    // Drag Begin
     public void OnBeginDrag(PointerEventData eventData)
     {
-
-        Debug.Log($"=== BEGIN DRAG === Item: {currentItem?.itemName ?? "EMPTY"}");
         if (currentItem == null) return;
         
-        // Create dragged icon
         draggedIcon = new GameObject("DraggedIcon");
         draggedIcon.transform.SetParent(canvas.transform, false);
         draggedIcon.transform.SetAsLastSibling();
@@ -138,11 +121,9 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         draggedCanvasGroup.alpha = 0.6f;
         draggedCanvasGroup.blocksRaycasts = false;
         
-        // Make original slot semi-transparent
         iconImage.color = new Color(1, 1, 1, 0.5f);
     }
     
-    // Drag
     public void OnDrag(PointerEventData eventData)
     {
         if (draggedIcon != null)
@@ -151,8 +132,6 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         }
     }
     
-    // Drag End
-    // Drag End
     public void OnEndDrag(PointerEventData eventData)
     {
         if (draggedIcon != null)
@@ -160,20 +139,16 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             Destroy(draggedIcon);
         }
         
-        // Restore original slot alpha
         iconImage.color = Color.white;
         
-        // Check if dropped on another slot
         GameObject targetObject = eventData.pointerCurrentRaycast.gameObject;
         InventorySlot targetSlot = null;
         
-        // Check if we hit a slot or a child of a slot
         if (targetObject != null)
         {
             targetSlot = targetObject.GetComponent<InventorySlot>();
             if (targetSlot == null)
             {
-                // Maybe we hit a child (like the icon or amount text)
                 targetSlot = targetObject.GetComponentInParent<InventorySlot>();
             }
         }
@@ -190,12 +165,10 @@ public class InventorySlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         
         if (currentItem != null)
         {
-            // Select this item
             inventoryUI.SelectItem(this);
         }
         else
         {
-            // Clicked empty slot - unequip
             inventoryUI.UnequipItem();
         }
     }

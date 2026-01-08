@@ -27,23 +27,19 @@ public class WorldItem : MonoBehaviour
     {
         startPosition = transform.position;
         
-        // Get or add rigidbody
         rb = GetComponent<Rigidbody>();
         if (rb == null)
         {
             rb = gameObject.AddComponent<Rigidbody>();
         }
         
-        // Configure rigidbody for items
         rb.mass = 0.5f;
         rb.drag = 0.5f;
         rb.angularDrag = 0.5f;
         
-        // Setup collider as trigger
         Collider col = GetComponent<Collider>();
         col.isTrigger = true;
         
-        // Visual setup
         if (visualModel == null)
         {
             visualModel = transform.childCount > 0 ? transform.GetChild(0).gameObject : null;
@@ -52,7 +48,6 @@ public class WorldItem : MonoBehaviour
     
     void Update()
     {
-        // Check if item has landed (stopped falling)
         if (!hasLanded && rb.velocity.magnitude < 0.1f)
         {
             hasLanded = true;
@@ -61,10 +56,8 @@ public class WorldItem : MonoBehaviour
         
         if (visualModel != null && hasLanded)
         {
-            // Rotate
             visualModel.transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
             
-            // Bob up and down (only after landing)
             float newY = startPosition.y + bobHeight + Mathf.Sin(Time.time * bobSpeed) * bobHeight;
             transform.position = new Vector3(transform.position.x, newY, transform.position.z);
         }
@@ -89,7 +82,6 @@ public class WorldItem : MonoBehaviour
     {
         if (itemData == null)
         {
-            Debug.LogError("WorldItem has no ItemData assigned!");
             return false;
         }
         
@@ -97,13 +89,11 @@ public class WorldItem : MonoBehaviour
         
         if (success)
         {
-            Debug.Log($"Picked up {amount}x {itemData.itemName}");
             Destroy(gameObject);
             return true;
         }
         else
         {
-            Debug.Log("Inventory is full!");
             return false;
         }
     }
@@ -113,7 +103,6 @@ public class WorldItem : MonoBehaviour
         itemData = data;
         amount = itemAmount;
         
-        // Update visual if needed
         if (data.worldPrefab != null && visualModel == null)
         {
             visualModel = Instantiate(data.worldPrefab, transform);

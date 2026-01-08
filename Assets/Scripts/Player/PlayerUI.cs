@@ -33,20 +33,16 @@ public class PlayerUI : MonoBehaviour
         
         if (playerStats != null)
         {
-            // Subscribe to stat changes
             playerStats.OnHealthChanged.AddListener(UpdateHealthUI);
             playerStats.OnHungerChanged.AddListener(UpdateHungerUI);
             playerStats.OnPlayerDeath.AddListener(ShowDeathScreen);
         }
         
-        // Apply colors
         if (healthBarFill != null) healthBarFill.color = healthColor;
         if (hungerBarFill != null) hungerBarFill.color = hungerColor;
         
-        // Hide death screen initially
         if (deathScreen != null) deathScreen.SetActive(false);
         
-        // Initial update
         UpdateHealthUI(playerStats.Health, playerStats.MaxHealth);
         UpdateHungerUI(playerStats.Hunger, playerStats.MaxHunger);
     }

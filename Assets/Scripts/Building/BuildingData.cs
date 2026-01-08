@@ -9,14 +9,14 @@ public class BuildingData : ScriptableObject
     public Sprite icon;
     
     [Header("Placement")]
-    public Vector3 snapSize = new Vector3(2f, 2f, 0.2f); // Width, Height, Depth
-    public Vector3 pivotOffset = Vector3.zero; // Offset from center if needed
+    public Vector3 snapSize = new Vector3(2f, 2f, 0.2f); 
+    public Vector3 pivotOffset = Vector3.zero; 
     public bool canRotate = true;
     public float rotationIncrement = 90f;
     
     [Header("Snapping")]
-    public bool snapToBuildings = true; // Snap to edges of other buildings
-    public float snapDistance = 0.5f; // How close to snap (0.5 units)
+    public bool snapToBuildings = true; 
+    public float snapDistance = 0.5f; 
     
     [Header("Material Cost")]
     public BuildingCost[] costs;
