@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 4031.2773, g: 2589.828, b: 1813.2922, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4640,6 +4640,8 @@ MonoBehaviour:
   biomes:
   - {fileID: 11400000, guid: fd624824a45b81346945f62453de5a22, type: 2}
   - {fileID: 11400000, guid: 0bee92b96eae30141b6ac294f3cc2921, type: 2}
+  sandMaterial: {fileID: 2100000, guid: 62f222e257db3ad4eb2783b7da0d1b85, type: 2}
+  waterMaterial: {fileID: 2100000, guid: fa32104831dd72c45a4fb79b6dfdc864, type: 2}
   vegetationParent: {fileID: 1754145425}
   groundMask:
     serializedVersion: 2
