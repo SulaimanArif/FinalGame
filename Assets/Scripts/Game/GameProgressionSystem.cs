@@ -27,6 +27,8 @@ public class GameProgressionSystem : MonoBehaviour
     
     [Tooltip("More enemies spawn each day")]
     public int additionalEnemiesPerDay = 2;
+
+    private float difficultyMultiplier = 1f;
     
     [Header("Events")]
     public UnityEvent<int> OnDayChanged; 
@@ -69,6 +71,7 @@ public class GameProgressionSystem : MonoBehaviour
         if (hasWon || hasLost) return;
         
         CheckDayNightTransition();
+        ApplyDifficultySettings();
     }
     
     void CheckDayNightTransition()
@@ -158,15 +161,26 @@ public class GameProgressionSystem : MonoBehaviour
             ai.fleeSpeed *= speedMultiplier;
         }
     }
+
+    void ApplyDifficultySettings()
+    {
+        switch (SettingsData.difficulty)
+        {
+            case 0: difficultyMultiplier = 0.75f; break;
+            case 1: difficultyMultiplier = 1f;    break;
+            case 2: difficultyMultiplier = 1.25f; break;
+            default: difficultyMultiplier = 1f;   break;
+        }
+    }
     
     public float GetHealthMultiplier()
     {
-        return Mathf.Pow(healthScalePerDay, currentDay - 1);
+        return Mathf.Pow(healthScalePerDay, currentDay - 1) * difficultyMultiplier;
     }
     
     public float GetDamageMultiplier()
     {
-        return Mathf.Pow(damageScalePerDay, currentDay - 1);
+        return Mathf.Pow(damageScalePerDay, currentDay - 1) * difficultyMultiplier;
     }
     
     public float GetSpeedMultiplier()
