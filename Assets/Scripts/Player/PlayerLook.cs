@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 public class PlayerLook : MonoBehaviour
 {
     [Header("Look Settings")]
-    public float mouseSensitivity = 100f;
+    public float mouseSensitivity = SettingsData.mouseSensitivity;
     public Transform playerBody;
     
     [Header("Input")]
