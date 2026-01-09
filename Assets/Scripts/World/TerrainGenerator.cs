@@ -67,6 +67,7 @@ public class TerrainGenerator : MonoBehaviour
         CreateTerrain(heightMap, moistureMap);
 
         CreateWaterPlane();
+        CreateColliderWaterPlane();
         
         StartCoroutine(SpawnVegetationDelayed(moistureMap));
     }
@@ -80,6 +81,11 @@ public class TerrainGenerator : MonoBehaviour
         {
             for (int x = 0; x < width; x += 2)
             {
+                if (IsSand(x, y, width, height, 10f))
+                {
+                    continue;
+                }
+
                 BiomeData biome = GetBiomeAtPosition(moistureMap[x, y]);
                 
                 if (biome != null && biome.vegetationPrefabs.Length > 0)
@@ -375,6 +381,35 @@ public class TerrainGenerator : MonoBehaviour
         }
 
         water.GetComponent<MeshCollider>().enabled = false;
+    }
+
+    void CreateColliderWaterPlane()
+    {
+        float waterWidth = mapWidth + 100f;
+        float waterHeight = mapHeight + 100f;
+
+        GameObject water = GameObject.CreatePrimitive(PrimitiveType.Plane);
+        water.name = "WaterPlane";
+
+        water.transform.localScale = new Vector3(waterWidth / 10f, 1f, waterHeight / 10f);
+
+        water.transform.position = new Vector3(mapWidth / 2f - 0.5f, -0.7f, mapHeight / 2f - 0.5f);
+
+        if (waterMaterial != null)
+        {
+            water.GetComponent<MeshRenderer>().material = waterMaterial;
+        }
+
+        water.GetComponent<MeshCollider>().enabled = true;
+    }
+
+    bool IsSand(int x, int y, int width, int height, float sandThreshold = 10f)
+    {
+        float distX = Mathf.Min(x, width - 1 - x);
+        float distY = Mathf.Min(y, height - 1 - y);
+        float distToEdge = Mathf.Min(distX, distY);
+
+        return distToEdge < sandThreshold;
     }
 
 }
