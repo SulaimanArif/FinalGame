@@ -20,14 +20,26 @@ MonoBehaviour:
   attackRange: 3
   toolType: 0
   hasDurability: 1
-  maxDurability: 5
+  maxDurability: 20
   currentDurability: 5
   bonusDamageTargets:
-  - targetPrefab: {fileID: 4032642331417584291, guid: e133dac167ef59c40b7678ba58107c6a, type: 3}
+  - targetPrefab: {fileID: 4606572056404561325, guid: 2160bc9ed7b20da49819a12ceee96963, type: 3}
     targetTag: 
     bonusDamage: 40
     targetName: 
-  - targetPrefab: {fileID: 6846767348704259191, guid: 273b8f4150121d249ac7e2fd11da7005, type: 3}
+  - targetPrefab: {fileID: 8328592796144810656, guid: c968d7b84101a0a41b89e6c77e7f61fe, type: 3}
+    targetTag: 
+    bonusDamage: 40
+    targetName: 
+  - targetPrefab: {fileID: 8639561865084749964, guid: a8120115b742a584c8d21d5e1dafffb9, type: 3}
+    targetTag: 
+    bonusDamage: 40
+    targetName: 
+  - targetPrefab: {fileID: 7163554691020909686, guid: 853a5008edf76a84ab8366d9219882f4, type: 3}
+    targetTag: 
+    bonusDamage: 40
+    targetName: 
+  - targetPrefab: {fileID: 7143308486342404810, guid: c17a23538cfa8df498f5270a4e917c1c, type: 3}
     targetTag: 
     bonusDamage: 40
     targetName: 

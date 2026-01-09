@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Wall
   m_EditorClassIdentifier: 
   buildingName: Wall
-  prefab: {fileID: 6677668958859823200, guid: b9d33ba0fb5598443b96055087288069, type: 3}
+  prefab: {fileID: 6424606389018938983, guid: 198ce7a44e8a19249bcee09a1456b2d9, type: 3}
   icon: {fileID: 0}
   snapSize: {x: 2, y: 2, z: 0.2}
   pivotOffset: {x: 2, y: 0, z: 0}
