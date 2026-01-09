@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   biomeName: Forest
   terrainMaterial: {fileID: 2100000, guid: 156c4370a1098fb45aab91ca1a88b314, type: 2}
-  heightMultiplier: 10
+  heightMultiplier: 8
   heightOffset: 0
   vegetationPrefabs:
   - {fileID: 8328592796144810656, guid: c968d7b84101a0a41b89e6c77e7f61fe, type: 3}
@@ -30,3 +30,7 @@ MonoBehaviour:
   vegetationDensity: 0.297
   moistureMin: 0.5
   moistureMax: 1
+  grassPrefab: {fileID: 0}
+  grassDensity: 0.3
+  grassPerPatch: 5
+  grassSpreadRadius: 0.5
