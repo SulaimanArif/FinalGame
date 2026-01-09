@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 781cc897cf8675041a751163b51f97dd, type: 3}
   m_Name: HDRenderPipelineGlobalSettings
   m_EditorClassIdentifier: 
-  m_DefaultVolumeProfile: {fileID: 11400000, guid: ef4dfe1271cddbc4f98961b6089fa02a, type: 2}
+  m_DefaultVolumeProfile: {fileID: 11400000, guid: 908d6589284a2204eb581a3c98d10bcb, type: 2}
   m_LookDevVolumeProfile: {fileID: 11400000, guid: 378493ab84b442b468febd16f361b469, type: 2}
   m_RenderingPathDefaultCameraFrameSettings:
     bitDatas:
@@ -102,7 +102,7 @@ MonoBehaviour:
     serializedBounds: []
     serializedHasVolumes: []
     bakingSets: []
-    m_LightingScenario: 
+    m_LightingScenario: Default
   m_Version: 8
   m_ShaderVariantLogLevel: 0
   m_SupportRuntimeDebugDisplay: 0
