@@ -37,12 +37,17 @@ public class PlayerLook : MonoBehaviour
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        Debug.Log("AHHHHHHHH" + mouseSensitivity);
+        Debug.Log("BHHHHHHHH" + SettingsData.mouseSensitivity);
     }
     
     void Update()
     {
-        float mouseX = lookInput.x * mouseSensitivity * Time.deltaTime;
-        float mouseY = lookInput.y * mouseSensitivity * Time.deltaTime;
+        float currentSensitivity = SettingsData.mouseSensitivity;
+        Debug.Log(currentSensitivity);
+
+        float mouseX = lookInput.x * currentSensitivity * Time.deltaTime;
+        float mouseY = lookInput.y * currentSensitivity * Time.deltaTime;
         
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);

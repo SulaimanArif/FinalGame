@@ -128,9 +128,12 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
+
+        float currentSensitivity = SettingsData.mouseSensitivity;
+        Debug.Log(currentSensitivity);
         
-        float mouseX = lookInput.x * mouseSensitivity;
-        float mouseY = lookInput.y * mouseSensitivity;
+        float mouseX = lookInput.x * currentSensitivity;
+        float mouseY = lookInput.y * currentSensitivity;
         
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, minVerticalAngle, maxVerticalAngle);

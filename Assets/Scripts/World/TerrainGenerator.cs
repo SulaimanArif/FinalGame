@@ -18,6 +18,10 @@ public class TerrainGenerator : MonoBehaviour
     
     [Header("Biomes")]
     public BiomeData[] biomes;
+    public Material sandMaterial;
+
+    [Header("Water")]
+    public Material waterMaterial;
     
     [Header("Vegetation")]
     public Transform vegetationParent;
@@ -61,6 +65,9 @@ public class TerrainGenerator : MonoBehaviour
         FlattenAroundVegetation(heightMap, moistureMap);
         
         CreateTerrain(heightMap, moistureMap);
+
+        CreateWaterPlane();
+        CreateColliderWaterPlane();
         
         StartCoroutine(SpawnVegetationDelayed(moistureMap));
     }
@@ -74,6 +81,11 @@ public class TerrainGenerator : MonoBehaviour
         {
             for (int x = 0; x < width; x += 2)
             {
+                if (IsSand(x, y, width, height, 10f))
+                {
+                    continue;
+                }
+
                 BiomeData biome = GetBiomeAtPosition(moistureMap[x, y]);
                 
                 if (biome != null && biome.vegetationPrefabs.Length > 0)
@@ -130,7 +142,7 @@ public class TerrainGenerator : MonoBehaviour
         }
     }
 
-     void CreateTerrain(float[,] heightMap, float[,] moistureMap)
+    void CreateTerrain(float[,] heightMap, float[,] moistureMap)
     {
         terrainObject = new GameObject("Terrain");
         terrainObject.transform.parent = transform;
@@ -148,58 +160,95 @@ public class TerrainGenerator : MonoBehaviour
         {
             meshRenderer.material = biomes[0].terrainMaterial;
         }
+
+        Material plainsMaterial = biomes[1].terrainMaterial;
+        Material forestMaterial = biomes[0].terrainMaterial;
+        meshRenderer.materials = new Material[]
+        {
+            sandMaterial,
+            plainsMaterial,
+            forestMaterial
+        };
     }
 
     Mesh GenerateMesh(float[,] heightMap, float[,] moistureMap)
     {
         int width = heightMap.GetLength(0);
         int height = heightMap.GetLength(1);
-        
+
         Mesh mesh = new Mesh();
         mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
-        
+
         Vector3[] vertices = new Vector3[width * height];
-        int[] triangles = new int[(width - 1) * (height - 1) * 6];
         Vector2[] uvs = new Vector2[width * height];
-        
+
+        List<int> sandTris = new List<int>();
+        List<int> plainsTris = new List<int>();
+        List<int> forestTris = new List<int>();
+
         int vertIndex = 0;
-        int triIndex = 0;
-        
+
         for (int y = 0; y < height; y++)
         {
             for (int x = 0; x < width; x++)
             {
+                float baseHeight = heightMap[x, y] * GetSquareFalloff(x, y, width, height);
+
                 BiomeData biome = GetBiomeAtPosition(moistureMap[x, y]);
-                float biomeHeight = biome != null ? heightMap[x, y] * biome.heightMultiplier + biome.heightOffset : heightMap[x, y] * 10f;
-                
+                float biomeHeight = biome != null ? baseHeight * biome.heightMultiplier + biome.heightOffset : baseHeight * 10f;
+
                 vertices[vertIndex] = new Vector3(x, biomeHeight, y);
                 uvs[vertIndex] = new Vector2(x / (float)width, y / (float)height);
-                
-                if (x < width - 1 && y < height - 1)
-                {
-                    triangles[triIndex] = vertIndex;
-                    triangles[triIndex + 1] = vertIndex + width;
-                    triangles[triIndex + 2] = vertIndex + width + 1;
-                    
-                    triangles[triIndex + 3] = vertIndex;
-                    triangles[triIndex + 4] = vertIndex + width + 1;
-                    triangles[triIndex + 5] = vertIndex + 1;
-                    
-                    triIndex += 6;
-                }
-                
                 vertIndex++;
             }
         }
-        
+
+        for (int y = 0; y < height - 1; y++)
+        {
+            for (int x = 0; x < width - 1; x++)
+            {
+                int i0 = y * width + x;
+                int i1 = i0 + 1;
+                int i2 = i0 + width;
+                int i3 = i2 + 1;
+
+                float distX = Mathf.Min(x, width - 1 - x);
+                float distY = Mathf.Min(y, height - 1 - y);
+                float distToEdge = Mathf.Min(distX, distY);
+                float sandThreshold = 10f;
+
+                List<int> targetList;
+
+                if (distToEdge < sandThreshold)
+                    targetList = sandTris;
+                else
+                {
+                    BiomeData biome = GetBiomeAtPosition(moistureMap[x, y]);
+                    if (biome != null && biome.biomeName == "Plains")
+                        targetList = plainsTris;
+                    else
+                        targetList = forestTris;
+                }
+
+                targetList.AddRange(new int[] { i0, i2, i3 });
+                targetList.AddRange(new int[] { i0, i3, i1 });
+            }
+        }
+
         mesh.vertices = vertices;
-        mesh.triangles = triangles;
         mesh.uv = uvs;
+
+        mesh.subMeshCount = 3;
+        mesh.SetTriangles(sandTris, 0);
+        mesh.SetTriangles(plainsTris, 1);
+        mesh.SetTriangles(forestTris, 2);
+
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
-        
+
         return mesh;
     }
+
     void SpawnGrass(float[,] moistureMap)
     {
         if (vegetationParent == null) return;
@@ -299,4 +348,68 @@ public class TerrainGenerator : MonoBehaviour
         }
         return biomes.Length > 0 ? biomes[0] : null;
     }
+
+    float GetSquareFalloff(int x, int y, int width, int height)
+    {
+        float distX = Mathf.Min(x, width - 1 - x);
+        float distY = Mathf.Min(y, height - 1 - y);
+
+        float distToEdge = Mathf.Min(distX, distY);
+
+        float fallStart = 18f;
+        float fallEnd   = 0f;
+
+        float t = Mathf.InverseLerp(fallEnd, fallStart, distToEdge);
+        return Mathf.Clamp01(t);
+    }
+
+    void CreateWaterPlane()
+    {
+        float waterWidth = mapWidth + 100f;
+        float waterHeight = mapHeight + 100f;
+
+        GameObject water = GameObject.CreatePrimitive(PrimitiveType.Plane);
+        water.name = "WaterPlane";
+
+        water.transform.localScale = new Vector3(waterWidth / 10f, 1f, waterHeight / 10f);
+
+        water.transform.position = new Vector3(mapWidth / 2f - 0.5f, 0f, mapHeight / 2f - 0.5f);
+
+        if (waterMaterial != null)
+        {
+            water.GetComponent<MeshRenderer>().material = waterMaterial;
+        }
+
+        water.GetComponent<MeshCollider>().enabled = false;
+    }
+
+    void CreateColliderWaterPlane()
+    {
+        float waterWidth = mapWidth + 100f;
+        float waterHeight = mapHeight + 100f;
+
+        GameObject water = GameObject.CreatePrimitive(PrimitiveType.Plane);
+        water.name = "WaterPlane";
+
+        water.transform.localScale = new Vector3(waterWidth / 10f, 1f, waterHeight / 10f);
+
+        water.transform.position = new Vector3(mapWidth / 2f - 0.5f, -0.7f, mapHeight / 2f - 0.5f);
+
+        if (waterMaterial != null)
+        {
+            water.GetComponent<MeshRenderer>().material = waterMaterial;
+        }
+
+        water.GetComponent<MeshCollider>().enabled = true;
+    }
+
+    bool IsSand(int x, int y, int width, int height, float sandThreshold = 10f)
+    {
+        float distX = Mathf.Min(x, width - 1 - x);
+        float distY = Mathf.Min(y, height - 1 - y);
+        float distToEdge = Mathf.Min(distX, distY);
+
+        return distToEdge < sandThreshold;
+    }
+
 }

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4901155340339187106}
   - component: {fileID: 6846767348704259192}
   - component: {fileID: -6202149329390102978}
+  - component: {fileID: 1340525352319506742}
   m_Layer: 7
   m_Name: PP_Tree_10
   m_TagString: Untagged
@@ -29,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 6846767348704259191}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.12, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -102,7 +103,7 @@ MeshCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
@@ -123,6 +124,9 @@ MonoBehaviour:
   currentHealth: 100
   canBeKnockedBack: 0
   knockbackResistance: 1
+  flashOnDamage: 1
+  damageColor: {r: 1, g: 0, b: 0, a: 1}
+  flashDuration: 0.2
   itemDrops:
   - itemData: {fileID: 11400000, guid: 9c161785c792e0c479ec2067bbe171bc, type: 2}
     dropChance: 1
@@ -135,7 +139,26 @@ MonoBehaviour:
   OnDeath:
     m_PersistentCalls:
       m_Calls: []
-  groundLayer:
+--- !u!136 &1340525352319506742
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6846767348704259191}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  groundRayDistance: 10
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 6.1635313
+  m_Direction: 1
+  m_Center: {x: 0, y: 3.0817657, z: 0}

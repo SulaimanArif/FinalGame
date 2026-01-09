@@ -16,7 +16,7 @@ public class ToolCombatSystem : MonoBehaviour
     public LayerMask hitMask; 
     
     [Header("Visual Feedback")]
-    public bool showHitMarker = true;
+    // public bool showHitMarker = true;
     public float hitMarkerDuration = 0.2f;
     
     [Header("Audio")]
