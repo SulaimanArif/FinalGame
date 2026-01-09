@@ -161,7 +161,6 @@ public class TerrainGenerator : MonoBehaviour
         Vector3[] vertices = new Vector3[width * height];
         int[] triangles = new int[(width - 1) * (height - 1) * 6];
         Vector2[] uvs = new Vector2[width * height];
-        
         int vertIndex = 0;
         int triIndex = 0;
         
