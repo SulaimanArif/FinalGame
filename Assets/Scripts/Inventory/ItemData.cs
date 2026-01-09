@@ -5,7 +5,7 @@ public class ItemData : ScriptableObject
 {
     [Header("Basic Info")]
     public string itemName = "New Item";
-    public string itemID = "item_00"; // Unique identifier
+    public string itemID = "item_00"; 
     [TextArea(3, 5)]
     public string description = "Item description";
     public Sprite icon;
@@ -18,7 +18,18 @@ public class ItemData : ScriptableObject
     public ItemType itemType = ItemType.Resource;
     
     [Header("World Representation")]
-    public GameObject worldPrefab; // The 3D model to spawn in world
+    public GameObject worldPrefab; 
+    
+    [Header("Food Properties")]
+    public bool isEdible = false;
+    public float hungerRestoreAmount = 20f;
+    public float healthRestoreAmount = 0f; 
+
+    [Header("Tool Properties (if Tool type)")]
+    public ToolData toolData; 
+
+    [System.NonSerialized]
+    public ToolInstance toolInstance;
 }
 
 public enum ItemType

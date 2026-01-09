@@ -10,7 +10,7 @@ public class Health : MonoBehaviour
     
     [Header("Knockback Settings")]
     public bool canBeKnockedBack = true;
-    public float knockbackResistance = 1f; // Multiplier for incoming knockback
+    public float knockbackResistance = 1f;
     
     [Header("Visual Feedback")]
     public bool flashOnDamage = true;
@@ -19,10 +19,10 @@ public class Health : MonoBehaviour
     
     [Header("Item Drops")]
     public ItemDrop[] itemDrops;
-    public float dropHeight = 1f; // Height above ground to spawn items
+    public float dropHeight = 1f;
     
     [Header("Events")]
-    public UnityEvent<float> OnDamaged; // Passes damage amount
+    public UnityEvent<float> OnDamaged;
     public UnityEvent OnDeath;
     
     private bool isDead = false;
@@ -32,12 +32,9 @@ public class Health : MonoBehaviour
     private MaterialPropertyBlock mpb;
     private Color[] originalColors;
 
-    
-    // Knockback for CharacterController
     private Vector3 knockbackVelocity;
     private float knockbackDecay = 5f;
     
-    // Visual feedback
     private Renderer[] renderers;
     private Material[][] originalMaterials;
     private Coroutine flashCoroutine;
@@ -49,10 +46,8 @@ public class Health : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         aiBehavior = GetComponent<AIBehavior>();
         
-        // Get all renderers (including children)
         renderers = GetComponentsInChildren<Renderer>();
         
-        // Store original materials
         mpb = new MaterialPropertyBlock();
         originalColors = new Color[renderers.Length];
 
@@ -66,7 +61,6 @@ public class Health : MonoBehaviour
     
     void Update()
     {
-        // Apply knockback for CharacterController
         if (characterController != null && knockbackVelocity.magnitude > 0.1f)
         {
             characterController.Move(knockbackVelocity * Time.deltaTime);
@@ -83,34 +77,29 @@ public class Health : MonoBehaviour
         
         OnDamaged?.Invoke(damage);
         
-        // Visual feedback
         if (flashOnDamage)
         {
             FlashDamage();
         }
         
-        // Alert AI that it was attacked
         if (aiBehavior != null)
         {
             aiBehavior.OnAttacked(damageSource);
         }
         
-        // Apply knockback
         if (canBeKnockedBack && knockbackForce > 0f)
         {
             Vector3 knockbackDirection = (transform.position - damageSource).normalized;
-            knockbackDirection.y = 0.3f; // Slight upward force
+            knockbackDirection.y = 0.3f; 
             
             float finalKnockback = knockbackForce * knockbackResistance;
             
             if (rb != null)
             {
-                // Rigidbody knockback
                 rb.AddForce(knockbackDirection * finalKnockback, ForceMode.Impulse);
             }
             else if (characterController != null)
             {
-                // CharacterController knockback (stored velocity)
                 knockbackVelocity = knockbackDirection * finalKnockback;
             }
         }
@@ -156,10 +145,8 @@ public class Health : MonoBehaviour
         isDead = true;
         OnDeath?.Invoke();
         
-        // Drop items
         DropItems();
         
-        // Destroy this GameObject
         Destroy(gameObject, 0.1f);
     }
 
@@ -167,15 +154,13 @@ public class Health : MonoBehaviour
     {
         RaycastHit hit;
 
-        // Start ray slightly above to avoid hitting own collider
         Vector3 rayStart = origin + Vector3.up * 0.5f;
 
         if (Physics.Raycast(rayStart, Vector3.down, out hit, 10f, ~0, QueryTriggerInteraction.Ignore))
         {
-            return hit.point + Vector3.up * 0.05f; // small offset to avoid clipping
+            return hit.point + Vector3.up * 0.05f;
         }
 
-        // Fallback if no ground found
         return origin;
     }
 
@@ -186,15 +171,12 @@ public class Health : MonoBehaviour
         {
             if (drop.itemData == null) continue;
             
-            // Random chance check
             if (Random.value > drop.dropChance) continue;
             
-            // Random amount within range
             int amount = Random.Range(drop.minAmount, drop.maxAmount + 1);
             
             if (amount <= 0) continue;
             
-            // Spawn item at position above ground
             Vector3 dropPosition = GetGroundPosition(transform.position);
             
             if (drop.itemData.worldPrefab != null)
@@ -207,7 +189,6 @@ public class Health : MonoBehaviour
                     worldItem.SetItemData(drop.itemData, amount);
                 }
                 
-                // Add slight random force and ensure rigidbody exists
                 Rigidbody itemRb = droppedItem.GetComponent<Rigidbody>();
                 if (itemRb == null)
                 {
@@ -215,7 +196,6 @@ public class Health : MonoBehaviour
                     itemRb.mass = 0.5f;
                 }
                 
-                // Apply random outward force
                 Vector3 randomDir = new Vector3(Random.Range(-1f, 1f), 0.5f, Random.Range(-1f, 1f)).normalized;
                 itemRb.AddForce(randomDir * 3f, ForceMode.Impulse);
             }
@@ -235,7 +215,7 @@ public class ItemDrop
 {
     public ItemData itemData;
     [Range(0f, 1f)]
-    public float dropChance = 1f; // 1 = always drops
+    public float dropChance = 1f;
     public int minAmount = 1;
     public int maxAmount = 1;
 }

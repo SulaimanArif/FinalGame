@@ -23,9 +23,9 @@ public class TerrainGenerator : MonoBehaviour
     public Transform vegetationParent;
     public LayerMask groundMask;
     [Range(0.5f, 5f)]
-    public float flattenRadius = 1.5f; // How far to flatten around vegetation
+    public float flattenRadius = 1.5f; 
     [Range(0f, 1f)]
-    public float flattenStrength = 0.8f; // How much to flatten (1 = completely flat)
+    public float flattenStrength = 0.8f;
     
     private GameObject terrainObject;
     private MeshFilter meshFilter;
@@ -40,11 +40,9 @@ public class TerrainGenerator : MonoBehaviour
 
     public void GenerateWorld()
     {
-        // Clear existing terrain
         if (terrainObject != null)
             DestroyImmediate(terrainObject);
             
-        // Clear existing vegetation
         if (vegetationParent != null)
         {
             foreach (Transform child in vegetationParent)
@@ -55,20 +53,15 @@ public class TerrainGenerator : MonoBehaviour
         
         vegetationPositions.Clear();
         
-        // Generate noise maps
         float[,] heightMap = NoiseGenerator.GenerateNoiseMap(mapWidth, mapHeight, scale, seed, octaves, persistence, lacunarity, offset);
         float[,] moistureMap = NoiseGenerator.GenerateNoiseMap(mapWidth, mapHeight, scale * 2, seed + 1, 3, 0.5f, 2f, offset);
         
-        // Determine vegetation positions FIRST
         DetermineVegetationPositions(moistureMap);
         
-        // Flatten terrain around vegetation positions
         FlattenAroundVegetation(heightMap, moistureMap);
         
-        // Create terrain mesh
         CreateTerrain(heightMap, moistureMap);
         
-        // Wait a frame for physics to update, then spawn vegetation
         StartCoroutine(SpawnVegetationDelayed(moistureMap));
     }
 
@@ -106,7 +99,6 @@ public class TerrainGenerator : MonoBehaviour
             int centerX = Mathf.RoundToInt(vegPos.x);
             int centerY = Mathf.RoundToInt(vegPos.y);
             
-            // Get center height
             if (centerX < 0 || centerX >= width || centerY < 0 || centerY >= height) continue;
             
             int moistureX = Mathf.Clamp(centerX, 0, moistureMap.GetLength(0) - 1);
@@ -115,7 +107,6 @@ public class TerrainGenerator : MonoBehaviour
             
             float targetHeight = heightMap[centerX, centerY];
             
-            // Flatten in a radius around this position
             int radiusInCells = Mathf.CeilToInt(flattenRadius);
             
             for (int y = centerY - radiusInCells; y <= centerY + radiusInCells; y++)
@@ -128,12 +119,10 @@ public class TerrainGenerator : MonoBehaviour
                     
                     if (distance <= flattenRadius)
                     {
-                        // Smooth falloff from center to edge
                         float influence = 1f - (distance / flattenRadius);
-                        influence = Mathf.Pow(influence, 2); // Smooth curve
+                        influence = Mathf.Pow(influence, 2); 
                         influence *= flattenStrength;
                         
-                        // Blend between original height and target height
                         heightMap[x, y] = Mathf.Lerp(heightMap[x, y], targetHeight, influence);
                     }
                 }
@@ -141,7 +130,7 @@ public class TerrainGenerator : MonoBehaviour
         }
     }
 
-    void CreateTerrain(float[,] heightMap, float[,] moistureMap)
+     void CreateTerrain(float[,] heightMap, float[,] moistureMap)
     {
         terrainObject = new GameObject("Terrain");
         terrainObject.transform.parent = transform;
@@ -155,7 +144,6 @@ public class TerrainGenerator : MonoBehaviour
         meshFilter.mesh = mesh;
         meshCollider.sharedMesh = mesh;
         
-        // Apply material based on dominant biome (simplified)
         if (biomes.Length > 0 && biomes[0].terrainMaterial != null)
         {
             meshRenderer.material = biomes[0].terrainMaterial;
@@ -212,12 +200,56 @@ public class TerrainGenerator : MonoBehaviour
         
         return mesh;
     }
+    void SpawnGrass(float[,] moistureMap)
+    {
+        if (vegetationParent == null) return;
+        
+        int width = moistureMap.GetLength(0);
+        int height = moistureMap.GetLength(1);
+        
+        for (int y = 0; y < height; y += 1) 
+        {
+            for (int x = 0; x < width; x += 1)
+            {
+                BiomeData biome = GetBiomeAtPosition(moistureMap[x, y]);
+                
+                if (biome != null && biome.grassPrefab != null)
+                {
+                    if (Random.value < biome.grassDensity)
+                    {
+                        SpawnGrassPatch(new Vector2(x, y), biome);
+                    }
+                }
+            }
+        }
+    }
+
+    void SpawnGrassPatch(Vector2 position, BiomeData biome)
+    {
+        for (int i = 0; i < biome.grassPerPatch; i++)
+        {
+            Vector2 offset = Random.insideUnitCircle * biome.grassSpreadRadius;
+            Vector3 rayStart = new Vector3(position.x + offset.x, 100f, position.y + offset.y);
+            
+            RaycastHit hit;
+            if (Physics.Raycast(rayStart, Vector3.down, out hit, 200f, groundMask))
+            {
+                Quaternion rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
+                rotation *= Quaternion.Euler(0, Random.Range(0, 360), 0);
+                
+                GameObject grass = Instantiate(biome.grassPrefab, hit.point, rotation, vegetationParent);
+                float scale = Random.Range(0.8f, 1.2f);
+                grass.transform.localScale = new Vector3(scale, scale, scale);
+            }
+        }
+    }
 
     System.Collections.IEnumerator SpawnVegetationDelayed(float[,] moistureMap)
     {
         yield return new WaitForFixedUpdate();
         
         SpawnVegetation(moistureMap);
+        SpawnGrass(moistureMap);
     }
 
     void SpawnVegetation(float[,] moistureMap)
@@ -238,7 +270,6 @@ public class TerrainGenerator : MonoBehaviour
             {
                 GameObject prefab = biome.vegetationPrefabs[Random.Range(0, biome.vegetationPrefabs.Length)];
                 
-                // Raycast to find exact ground position
                 RaycastHit hit;
                 Vector3 rayStart = new Vector3(vegPos.x, 100f, vegPos.y);
                 

@@ -21,4 +21,11 @@ public class BiomeData : ScriptableObject
     public float moistureMin = 0f;
     [Range(0f, 1f)]
     public float moistureMax = 1f;
+
+    [Header("Grass")]
+    public GameObject grassPrefab;
+    [Range(0f, 1f)]
+    public float grassDensity = 0.3f;
+    public int grassPerPatch = 5;
+    public float grassSpreadRadius = 0.5f; 
 }

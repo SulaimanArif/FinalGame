@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
+using System.Linq;
 
 public class CraftingUI : MonoBehaviour
 {
@@ -42,7 +43,6 @@ public class CraftingUI : MonoBehaviour
             craftButton.onClick.AddListener(OnCraftButtonClicked);
         }
         
-        // Hide details panel initially
         if (recipeDetailsPanel != null)
         {
             recipeDetailsPanel.SetActive(false);
@@ -53,7 +53,6 @@ public class CraftingUI : MonoBehaviour
     
     public void RefreshRecipes()
     {
-        // Clear existing buttons
         foreach (GameObject button in spawnedRecipeButtons)
         {
             Destroy(button);
@@ -62,22 +61,19 @@ public class CraftingUI : MonoBehaviour
         
         if (craftingSystem == null) return;
         
-        // Create button for each recipe
         List<CraftingRecipe> allRecipes = craftingSystem.GetAllRecipes();
         
         foreach (CraftingRecipe recipe in allRecipes)
         {
             GameObject buttonObj = Instantiate(recipeButtonPrefab, recipesContainer);
             
-            // Setup button
             Button button = buttonObj.GetComponent<Button>();
             if (button != null)
             {
-                CraftingRecipe recipeRef = recipe; // Capture for lambda
+                CraftingRecipe recipeRef = recipe; 
                 button.onClick.AddListener(() => SelectRecipe(recipeRef));
             }
             
-            // Setup visuals
             Image iconImage = buttonObj.transform.Find("Icon")?.GetComponent<Image>();
             if (iconImage != null && recipe.GetIcon() != null)
             {
@@ -91,10 +87,8 @@ public class CraftingUI : MonoBehaviour
                 nameText.text = recipe.recipeName;
             }
             
-            // Check if can craft
             bool canCraft = craftingSystem.CanCraftRecipe(recipe);
             
-            // Dim if can't craft
             CanvasGroup canvasGroup = buttonObj.GetComponent<CanvasGroup>();
             if (canvasGroup == null)
             {
@@ -115,11 +109,11 @@ public class CraftingUI : MonoBehaviour
             recipeDetailsPanel.SetActive(true);
         }
         
-        // Update recipe details
         if (recipeIcon != null && recipe.GetIcon() != null)
         {
             recipeIcon.sprite = recipe.GetIcon();
             recipeIcon.enabled = true;
+            recipeIcon.color = Color.white;
         }
         
         if (recipeNameText != null)
@@ -132,39 +126,60 @@ public class CraftingUI : MonoBehaviour
             recipeDescriptionText.text = recipe.description;
         }
         
-        // Clear previous materials display
         foreach (GameObject display in spawnedMaterialDisplays)
         {
             Destroy(display);
         }
         spawnedMaterialDisplays.Clear();
         
-        // Display required materials
+        int index = 0;
         foreach (CraftingMaterial material in recipe.requiredMaterials)
         {
             GameObject displayObj = Instantiate(materialDisplayPrefab, materialsContainer);
             
-            Image matIcon = displayObj.transform.Find("Icon")?.GetComponent<Image>();
-            if (matIcon != null && material.item.icon != null)
+            for (int i = 0; i < displayObj.transform.childCount; i++)
+            {
+                Transform child = displayObj.transform.GetChild(i);
+            }
+            
+            Transform iconTransform = displayObj.transform.Find("Image");
+            
+            Image matIcon = null;
+            if (iconTransform != null)
+            {
+                matIcon = iconTransform.GetComponent<Image>();
+            }
+            
+            Transform nameTransform = displayObj.transform.Find("ItemName");
+            Transform amountTransform = displayObj.transform.Find("Amount");
+            
+            TextMeshProUGUI itemNameText = nameTransform?.GetComponent<TextMeshProUGUI>();
+            TextMeshProUGUI matAmountText = amountTransform?.GetComponent<TextMeshProUGUI>();
+            
+            if (matIcon != null && material.item != null && material.item.icon != null)
             {
                 matIcon.sprite = material.item.icon;
                 matIcon.enabled = true;
+                matIcon.color = Color.white;
             }
             
-            TextMeshProUGUI matText = displayObj.transform.Find("Amount")?.GetComponent<TextMeshProUGUI>();
-            if (matText != null)
+            if (itemNameText != null && material.item != null)
+            {
+                itemNameText.text = material.item.itemName;
+
+            }
+            
+            if (matAmountText != null && material.item != null)
             {
                 int available = craftingSystem.inventorySystem.GetItemCount(material.item);
-                matText.text = $"{available}/{material.amount}";
-                
-                // Color red if not enough
-                matText.color = available >= material.amount ? Color.white : Color.red;
+                matAmountText.text = $"{available}/{material.amount}";
+                matAmountText.color = available >= material.amount ? Color.white : Color.red;
             }
             
             spawnedMaterialDisplays.Add(displayObj);
+            index++;
         }
         
-        // Update craft button
         UpdateCraftButton();
     }
     
@@ -189,14 +204,12 @@ public class CraftingUI : MonoBehaviour
         
         if (success)
         {
-            // Refresh UI
             RefreshRecipes();
             UpdateCraftButton();
             
-            // Update materials display
             if (selectedRecipe != null)
             {
-                SelectRecipe(selectedRecipe); // Refresh details panel
+                SelectRecipe(selectedRecipe); 
             }
         }
     }

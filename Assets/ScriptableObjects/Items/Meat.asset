@@ -20,3 +20,6 @@ MonoBehaviour:
   maxStackSize: 99
   itemType: 1
   worldPrefab: {fileID: 7952619276552823229, guid: a0a6a5d392cb8c745a9707778236fa11, type: 3}
+  isEdible: 1
+  hungerRestoreAmount: 20
+  healthRestoreAmount: 0

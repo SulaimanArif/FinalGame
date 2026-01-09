@@ -266,10 +266,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   aggroType: 2
-  attackDamage: 10
+  attackDamage: 30
   attackKnockback: 10
   attackRange: 2
   attackCooldown: 1
+  canAttackBuildings: 0
+  buildingAttackRange: 2.5
+  buildingMask:
+    serializedVersion: 2
+    m_Bits: 0
   detectionRange: 10
   playerMask:
     serializedVersion: 2
@@ -277,11 +282,24 @@ MonoBehaviour:
   moveSpeed: 3.5
   rotationSpeed: 5
   useCreatureMover: 1
+  gravity: -9.81
+  enableWandering: 1
+  wanderSpeed: 2
+  minWanderTime: 3
+  maxWanderTime: 8
+  minIdleTime: 40
+  maxIdleTime: 60
+  wanderRadius: 15
+  canGraze: 0
+  grazeChance: 0.3
+  minGrazeTime: 2
+  maxGrazeTime: 4
   fleeSpeed: 5
   fleeDistance: 15
   fleeDuration: 5
   animator: {fileID: 491993309112202023}
   useAnimations: 1
+  useCreatureMoverAnimations: 0
 --- !u!114 &3801174477022675004
 MonoBehaviour:
   m_ObjectHideFlags: 0

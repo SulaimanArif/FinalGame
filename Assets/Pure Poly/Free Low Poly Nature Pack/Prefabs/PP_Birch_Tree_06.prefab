@@ -123,11 +123,14 @@ MonoBehaviour:
   currentHealth: 100
   canBeKnockedBack: 0
   knockbackResistance: 1
+  flashOnDamage: 1
+  damageColor: {r: 1, g: 0, b: 0, a: 1}
+  flashDuration: 0.2
   itemDrops:
   - itemData: {fileID: 11400000, guid: 9c161785c792e0c479ec2067bbe171bc, type: 2}
     dropChance: 1
-    minAmount: 3
-    maxAmount: 5
+    minAmount: 1
+    maxAmount: 3
   dropHeight: 1
   OnDamaged:
     m_PersistentCalls:
@@ -135,7 +138,3 @@ MonoBehaviour:
   OnDeath:
     m_PersistentCalls:
       m_Calls: []
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  groundRayDistance: 10

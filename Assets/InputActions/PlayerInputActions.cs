@@ -71,6 +71,33 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UseItem"",
+                    ""type"": ""Button"",
+                    ""id"": ""b0fe44ec-9d56-4f36-9e12-63198496f6ad"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RotateBuilding"",
+                    ""type"": ""Button"",
+                    ""id"": ""9a787c4b-f89f-4dd4-9002-0a4de95a65e3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleBuildMode"",
+                    ""type"": ""Button"",
+                    ""id"": ""3fcfd7a8-d469-406a-b657-0dc636389c41"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -172,6 +199,39 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Attack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3eb3c883-cc54-4488-a87b-44cf6af725b0"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UseItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b5b328eb-e1b8-43c5-8b84-a211943326fb"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotateBuilding"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1fc091ff-bc6a-4a9a-8ad7-32c50413983b"",
+                    ""path"": ""<Keyboard>/b"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleBuildMode"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -185,6 +245,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Inventory = m_Player.FindAction("Inventory", throwIfNotFound: true);
         m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
+        m_Player_UseItem = m_Player.FindAction("UseItem", throwIfNotFound: true);
+        m_Player_RotateBuilding = m_Player.FindAction("RotateBuilding", throwIfNotFound: true);
+        m_Player_ToggleBuildMode = m_Player.FindAction("ToggleBuildMode", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -251,6 +314,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Inventory;
     private readonly InputAction m_Player_Attack;
+    private readonly InputAction m_Player_UseItem;
+    private readonly InputAction m_Player_RotateBuilding;
+    private readonly InputAction m_Player_ToggleBuildMode;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -260,6 +326,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @Inventory => m_Wrapper.m_Player_Inventory;
         public InputAction @Attack => m_Wrapper.m_Player_Attack;
+        public InputAction @UseItem => m_Wrapper.m_Player_UseItem;
+        public InputAction @RotateBuilding => m_Wrapper.m_Player_RotateBuilding;
+        public InputAction @ToggleBuildMode => m_Wrapper.m_Player_ToggleBuildMode;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -284,6 +353,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Attack.started += instance.OnAttack;
             @Attack.performed += instance.OnAttack;
             @Attack.canceled += instance.OnAttack;
+            @UseItem.started += instance.OnUseItem;
+            @UseItem.performed += instance.OnUseItem;
+            @UseItem.canceled += instance.OnUseItem;
+            @RotateBuilding.started += instance.OnRotateBuilding;
+            @RotateBuilding.performed += instance.OnRotateBuilding;
+            @RotateBuilding.canceled += instance.OnRotateBuilding;
+            @ToggleBuildMode.started += instance.OnToggleBuildMode;
+            @ToggleBuildMode.performed += instance.OnToggleBuildMode;
+            @ToggleBuildMode.canceled += instance.OnToggleBuildMode;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -303,6 +381,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Attack.started -= instance.OnAttack;
             @Attack.performed -= instance.OnAttack;
             @Attack.canceled -= instance.OnAttack;
+            @UseItem.started -= instance.OnUseItem;
+            @UseItem.performed -= instance.OnUseItem;
+            @UseItem.canceled -= instance.OnUseItem;
+            @RotateBuilding.started -= instance.OnRotateBuilding;
+            @RotateBuilding.performed -= instance.OnRotateBuilding;
+            @RotateBuilding.canceled -= instance.OnRotateBuilding;
+            @ToggleBuildMode.started -= instance.OnToggleBuildMode;
+            @ToggleBuildMode.performed -= instance.OnToggleBuildMode;
+            @ToggleBuildMode.canceled -= instance.OnToggleBuildMode;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -327,5 +414,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnInventory(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);
+        void OnUseItem(InputAction.CallbackContext context);
+        void OnRotateBuilding(InputAction.CallbackContext context);
+        void OnToggleBuildMode(InputAction.CallbackContext context);
     }
 }

@@ -9,10 +9,19 @@ public class PlayerController : MonoBehaviour
     public float gravity = -9.81f;
     public float jumpHeight = 2f;
     
+    [Header("Camera")]
+    public Transform playerCamera;
+    public float mouseSensitivity = 2f;
+    public float minVerticalAngle = -90f;
+    public float maxVerticalAngle = 90f;
+    
     [Header("Ground Check")]
     public Transform groundCheck;
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
+    
+    [Header("References")]
+    public InventoryUI inventoryUI; 
     
     [Header("Input")]
     public PlayerInputActions playerInputActions;
@@ -20,34 +29,30 @@ public class PlayerController : MonoBehaviour
     private CharacterController controller;
     private Vector3 velocity;
     private bool isGrounded;
-    private Vector2 moveInput;
-    private bool jumpInput;
+    private float xRotation = 0f;
     
     void Awake()
     {
-        // Initialize input actions
         playerInputActions = new PlayerInputActions();
+        
+        if (playerCamera == null)
+        {
+            playerCamera = Camera.main.transform;
+        }
+        
+        if (inventoryUI == null)
+        {
+            inventoryUI = FindObjectOfType<InventoryUI>();
+        }
     }
     
     void OnEnable()
     {
-        // Enable input actions
         playerInputActions.Player.Enable();
-        
-        // Subscribe to input events
-        playerInputActions.Player.Movement.performed += OnMovementPerformed;
-        playerInputActions.Player.Movement.canceled += OnMovementCanceled;
-        playerInputActions.Player.Jump.performed += OnJumpPerformed;
     }
     
     void OnDisable()
     {
-        // Unsubscribe from input events
-        playerInputActions.Player.Movement.performed -= OnMovementPerformed;
-        playerInputActions.Player.Movement.canceled -= OnMovementCanceled;
-        playerInputActions.Player.Jump.performed -= OnJumpPerformed;
-        
-        // Disable input actions
         playerInputActions.Player.Disable();
     }
     
@@ -55,7 +60,6 @@ public class PlayerController : MonoBehaviour
     {
         controller = GetComponent<CharacterController>();
         
-        // Create ground check if it doesn't exist
         if (groundCheck == null)
         {
             GameObject groundCheckObj = new GameObject("GroundCheck");
@@ -67,43 +71,79 @@ public class PlayerController : MonoBehaviour
     
     void Update()
     {
-        // Ground check
+        bool isPlayerFrozen = IsPlayerFrozen();
+        
+        CheckGround();
+        velocity.y += gravity * Time.deltaTime;
+        controller.Move(velocity * Time.deltaTime);
+        
+        if (!isPlayerFrozen)
+        {
+            HandleMovement();
+            HandleCamera();
+            HandleJump();
+        }
+    }
+    
+    bool IsPlayerFrozen()
+    {
+        if (inventoryUI != null && inventoryUI.IsInventoryOpen())
+        {
+            return true;
+        }
+        
+        if (CursorManager.Instance != null && !CursorManager.Instance.IsLocked())
+        {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    void CheckGround()
+    {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
         
         if (isGrounded && velocity.y < 0)
         {
             velocity.y = -2f;
         }
+    }
+    
+    void HandleMovement()
+    {
+        Vector2 moveInput = playerInputActions.Player.Movement.ReadValue<Vector2>();
         
-        // Movement
         Vector3 move = transform.right * moveInput.x + transform.forward * moveInput.y;
         controller.Move(move * walkSpeed * Time.deltaTime);
+    }
+    
+    void HandleCamera()
+    {
+        if (playerCamera == null) return;
         
-        // Jump
-        if (jumpInput && isGrounded)
+        Vector2 lookInput = playerInputActions.Player.Look.ReadValue<Vector2>();
+        
+        if (IsPlayerFrozen())
         {
-            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-            jumpInput = false;
+            return;
         }
         
-        // Apply gravity
-        velocity.y += gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
+        float mouseX = lookInput.x * mouseSensitivity;
+        float mouseY = lookInput.y * mouseSensitivity;
+        
+        xRotation -= mouseY;
+        xRotation = Mathf.Clamp(xRotation, minVerticalAngle, maxVerticalAngle);
+        playerCamera.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+        
+        transform.Rotate(Vector3.up * mouseX);
     }
     
-    // Input callbacks
-    private void OnMovementPerformed(InputAction.CallbackContext context)
+    void HandleJump()
     {
-        moveInput = context.ReadValue<Vector2>();
-    }
-    
-    private void OnMovementCanceled(InputAction.CallbackContext context)
-    {
-        moveInput = Vector2.zero;
-    }
-    
-    private void OnJumpPerformed(InputAction.CallbackContext context)
-    {
-        jumpInput = true;
+        if (playerInputActions.Player.Jump.triggered && isGrounded)
+        {
+            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        }
     }
 }

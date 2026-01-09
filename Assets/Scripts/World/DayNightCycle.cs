@@ -42,23 +42,11 @@ public class DayNightCycle : MonoBehaviour
         if (sunLight != null)
         {
             hdSunLightData = sunLight.GetComponent<HDAdditionalLightData>();
-            if (hdSunLightData == null)
-            {
-                Debug.LogError("Sun Light is missing HDAdditionalLightData component!");
-            }
         }
         
         if (moonLight != null)
         {
             hdMoonLightData = moonLight.GetComponent<HDAdditionalLightData>();
-            if (hdMoonLightData == null)
-            {
-                Debug.LogError("Moon Light is missing HDAdditionalLightData component!");
-            }
-        }
-        else
-        {
-            Debug.LogWarning("Moon Light is not assigned to DayNightCycle!");
         }
         
         if (skyVolume != null && skyVolume.profile.TryGet(out exposureOverride))
@@ -93,21 +81,16 @@ public class DayNightCycle : MonoBehaviour
             float moonAngle = sunAngle + 180f;
             moonLight.transform.rotation = Quaternion.Euler(moonAngle, 170f, 0f);
             
-            // Moon is visible when sun is below horizon
-            bool isNightTime = sunAngle < -90f || sunAngle > 90f;
+            bool isNightTime = timeOfDay < 0.25f || timeOfDay > 0.75f;
             
             if (isNightTime)
             {
-                // Keep moon at full brightness all night
                 hdMoonLightData.SetIntensity(moonIntensity);
                 moonLight.enabled = true;
-                
-                Debug.Log($"NIGHT - SunAngle:{sunAngle:F0} MoonAngle:{moonAngle:F0} MoonIntensity:{moonIntensity:F0}");
             }
             else
             {
                 moonLight.enabled = false;
-                Debug.Log($"DAY - SunAngle:{sunAngle:F0} Moon disabled");
             }
             
             hdMoonLightData.SetColor(moonColor, moonColorTemperature);
@@ -188,4 +171,4 @@ public class DayNightCycle : MonoBehaviour
     {
         timeOfDay = Mathf.Clamp01(time);
     }
-}
+} 

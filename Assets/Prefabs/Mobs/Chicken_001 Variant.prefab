@@ -267,6 +267,17 @@ MonoBehaviour:
   moveSpeed: 3.5
   rotationSpeed: 5
   useCreatureMover: 1
+  enableWandering: 1
+  wanderSpeed: 2
+  minWanderTime: 3
+  maxWanderTime: 8
+  minIdleTime: 20
+  maxIdleTime: 30
+  wanderRadius: 15
+  canGraze: 0
+  grazeChance: 0.3
+  minGrazeTime: 2
+  maxGrazeTime: 4
   fleeSpeed: 5
   fleeDistance: 15
   fleeDuration: 5

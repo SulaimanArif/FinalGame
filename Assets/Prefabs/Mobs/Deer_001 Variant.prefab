@@ -232,7 +232,11 @@ MonoBehaviour:
   flashOnDamage: 1
   damageColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.2
-  itemDrops: []
+  itemDrops:
+  - itemData: {fileID: 11400000, guid: 498b315b16569fb45a22ad5f50559ff5, type: 2}
+    dropChance: 1
+    minAmount: 2
+    maxAmount: 4
   dropHeight: 1
   OnDamaged:
     m_PersistentCalls:
@@ -252,11 +256,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 608da2684ed0ec240a45f2127f9ee9b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  aggroType: 1
+  aggroType: 0
   attackDamage: 10
   attackKnockback: 3
   attackRange: 2
   attackCooldown: 1
+  canAttackBuildings: 0
+  buildingAttackRange: 2.5
+  buildingMask:
+    serializedVersion: 2
+    m_Bits: 0
   detectionRange: 10
   playerMask:
     serializedVersion: 2
@@ -264,8 +273,21 @@ MonoBehaviour:
   moveSpeed: 3.5
   rotationSpeed: 5
   useCreatureMover: 1
+  gravity: -9.81
+  enableWandering: 1
+  wanderSpeed: 2
+  minWanderTime: 3
+  maxWanderTime: 8
+  minIdleTime: 20
+  maxIdleTime: 30
+  wanderRadius: 15
+  canGraze: 0
+  grazeChance: 0.3
+  minGrazeTime: 2
+  maxGrazeTime: 4
   fleeSpeed: 5
   fleeDistance: 15
   fleeDuration: 5
   animator: {fileID: 0}
   useAnimations: 1
+  useCreatureMoverAnimations: 0

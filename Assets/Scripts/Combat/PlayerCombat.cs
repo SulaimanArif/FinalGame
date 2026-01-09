@@ -10,8 +10,8 @@ public class PlayerCombat : MonoBehaviour
     public float attackCooldown = 0.5f;
     
     [Header("Attack Detection")]
-    public Transform attackPoint; // Point from which to raycast
-    public LayerMask attackMask; // What can be attacked
+    public Transform attackPoint;
+    public LayerMask attackMask;
     
     [Header("Input")]
     public PlayerInputActions inputActions;
@@ -46,7 +46,6 @@ public class PlayerCombat : MonoBehaviour
     {
         mainCamera = Camera.main;
         
-        // Create attack point if it doesn't exist
         if (attackPoint == null)
         {
             GameObject attackPointObj = new GameObject("AttackPoint");
@@ -58,7 +57,6 @@ public class PlayerCombat : MonoBehaviour
     
     void Update()
     {
-        // Apply knockback decay
         if (knockbackVelocity.magnitude > 0.1f)
         {
             characterController.Move(knockbackVelocity * Time.deltaTime);
@@ -77,27 +75,19 @@ public class PlayerCombat : MonoBehaviour
     
     void PerformAttack()
     {
-        // Raycast from camera center
         RaycastHit hit;
         Vector3 rayOrigin = mainCamera.transform.position;
         Vector3 rayDirection = mainCamera.transform.forward;
         
         if (Physics.Raycast(rayOrigin, rayDirection, out hit, attackRange, attackMask))
         {
-            // Hit something
             Health targetHealth = hit.collider.GetComponent<Health>();
             
             if (targetHealth != null)
             {
-                // Deal damage with knockback
                 targetHealth.TakeDamage(attackDamage, transform.position, attackKnockback);
-                
-                Debug.Log($"Hit {hit.collider.name} for {attackDamage} damage!");
             }
         }
-        
-        // Visual feedback (optional - add animation/sound here)
-        Debug.DrawRay(rayOrigin, rayDirection * attackRange, Color.red, 0.5f);
     }
     
     public void ApplyKnockback(Vector3 knockback)
@@ -110,7 +100,6 @@ public class PlayerCombat : MonoBehaviour
         if (mainCamera == null) mainCamera = Camera.main;
         if (mainCamera == null) return;
         
-        // Draw attack range
         Gizmos.color = Color.red;
         Gizmos.DrawRay(mainCamera.transform.position, mainCamera.transform.forward * attackRange);
     }
