@@ -308,17 +308,17 @@ public class TerrainGenerator : MonoBehaviour
 
     float GetRadialFalloff(int x, int y, int width, int height)
     {
-        // float centerX = width / 2f;
-        // float centerY = height / 2f;
+        float centerX = width / 2f;
+        float centerY = height / 2f;
 
-        // float maxDistance = Vector2.Distance(Vector2.zero, new Vector2(centerX, centerY));
-        // float dist = Vector2.Distance(new Vector2(x, y), new Vector2(centerX, centerY));
+        float maxDistance = Mathf.Min(width, height) / 2f;
+        float dist = Vector2.Distance(new Vector2(x, y), new Vector2(centerX, centerY));
 
-        // float t = Mathf.Clamp01(dist / maxDistance);
+        float fallStart = maxDistance - 30f;
+        float fallEnd   = maxDistance;
 
-        // return Mathf.Pow(1f - t, 3f);
-
-        return 1;
+        float t = Mathf.InverseLerp(fallStart, fallEnd, dist);
+        return Mathf.Clamp01(1f - t);
     }
 
 }

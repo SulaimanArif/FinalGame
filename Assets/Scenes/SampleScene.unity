@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 4016.1877, g: 2593.9368, b: 1845.2397, a: 1}
+  m_IndirectSpecularColor: {r: 4031.2773, g: 2589.828, b: 1813.2922, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3605,7 +3605,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 16, y: -51}
+  m_AnchoredPosition: {x: 16, y: -902}
   m_SizeDelta: {x: 300, y: 30}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &921306503
@@ -3982,7 +3982,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 16, y: -51}
+  m_AnchoredPosition: {x: 16, y: -893}
   m_SizeDelta: {x: 300, y: 30}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &970879112
@@ -4871,17 +4871,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   craftingSystem: {fileID: 2079913020}
-  craftingPanel: {fileID: 1440120441}
-  recipesContainer: {fileID: 1599015825}
+  craftingPanel: {fileID: 317432149}
+  recipesContainer: {fileID: 1798985698}
   recipeButtonPrefab: {fileID: 4816738174945824627, guid: 7184d2cdc773c2b40b7c3bc7aeaf47fe, type: 3}
-  recipeDetailsPanel: {fileID: 563191463}
-  recipeIcon: {fileID: 592844217}
-  recipeNameText: {fileID: 1245185391}
-  recipeDescriptionText: {fileID: 841584950}
-  materialsContainer: {fileID: 613730865}
+  recipeDetailsPanel: {fileID: 1671317336}
+  recipeIcon: {fileID: 788181931}
+  recipeNameText: {fileID: 1530155906}
+  recipeDescriptionText: {fileID: 1403744492}
+  materialsContainer: {fileID: 451602551}
   materialDisplayPrefab: {fileID: 2057608598844854990, guid: 090d242cd6a6d5948a9b6df5576a58cf, type: 3}
-  craftButton: {fileID: 1899169413}
-  craftButtonText: {fileID: 1316406249}
+  craftButton: {fileID: 150976657}
+  craftButtonText: {fileID: 430057139}
 --- !u!1 &1245185389
 GameObject:
   m_ObjectHideFlags: 0
@@ -6685,7 +6685,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventorySystem: {fileID: 2079913018}
   inventoryPanel: {fileID: 1769422682}
-  slotsParent: {fileID: 1411100740}
+  slotsParent: {fileID: 16910812}
   slotPrefab: {fileID: 3440188586057214690, guid: 73a72d4d79e5dff4db04ca3c39b33939, type: 3}
   inventoryTab: {fileID: 1569887042}
   craftingTab: {fileID: 317432149}
@@ -6693,10 +6693,10 @@ MonoBehaviour:
   craftingTabButton: {fileID: 313942286}
   slotSize: 80
   slotSpacing: 10
-  itemDetailPanel: {fileID: 1883106769}
-  detailIcon: {fileID: 963943450}
-  detailNameText: {fileID: 819521879}
-  detailDescriptionText: {fileID: 1401603892}
+  itemDetailPanel: {fileID: 1625588251}
+  detailIcon: {fileID: 178190574}
+  detailNameText: {fileID: 721502851}
+  detailDescriptionText: {fileID: 1317400654}
   detailTypeText: {fileID: 0}
   detailStatsText: {fileID: 0}
 --- !u!1 &1671317336
@@ -8338,7 +8338,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -60}
+  m_AnchoredPosition: {x: 0, y: -64}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1995271123

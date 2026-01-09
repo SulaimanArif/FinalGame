@@ -31,6 +31,6 @@ MonoBehaviour:
   moistureMin: 0.5
   moistureMax: 1
   grassPrefab: {fileID: 0}
-  grassDensity: 0.3
+  grassDensity: 0.516
   grassPerPatch: 5
-  grassSpreadRadius: 0.5
+  grassSpreadRadius: 1
