@@ -170,7 +170,14 @@ public class TerrainGenerator : MonoBehaviour
             for (int x = 0; x < width; x++)
             {
                 BiomeData biome = GetBiomeAtPosition(moistureMap[x, y]);
-                float biomeHeight = biome != null ? heightMap[x, y] * biome.heightMultiplier + biome.heightOffset : heightMap[x, y] * 10f;
+                // float biomeHeight = biome != null ? heightMap[x, y] * biome.heightMultiplier + biome.heightOffset : heightMap[x, y] * 10f;
+
+                float baseHeight = heightMap[x, y];
+
+                float falloff = GetRadialFalloff(x, y, width, height);
+                baseHeight *= falloff;
+
+                float biomeHeight = biome != null ? baseHeight * biome.heightMultiplier + biome.heightOffset : baseHeight * 10f;
                 
                 vertices[vertIndex] = new Vector3(x, biomeHeight, y);
                 uvs[vertIndex] = new Vector2(x / (float)width, y / (float)height);
@@ -299,4 +306,20 @@ public class TerrainGenerator : MonoBehaviour
         }
         return biomes.Length > 0 ? biomes[0] : null;
     }
+
+    float GetRadialFalloff(int x, int y, int width, int height)
+    {
+        // float centerX = width / 2f;
+        // float centerY = height / 2f;
+
+        // float maxDistance = Vector2.Distance(Vector2.zero, new Vector2(centerX, centerY));
+        // float dist = Vector2.Distance(new Vector2(x, y), new Vector2(centerX, centerY));
+
+        // float t = Mathf.Clamp01(dist / maxDistance);
+
+        // return Mathf.Pow(1f - t, 3f);
+
+        return 1;
+    }
+
 }
