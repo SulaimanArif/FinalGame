@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56a91b58d93995e48b84c9b670b52e17, type: 3}
   m_Name: IronSword
   m_EditorClassIdentifier: 
-  toolName: Sword
+  toolName: Iron Sword
   icon: {fileID: 21300000, guid: a36f24e9408f85e40aac4f87573d6e0e, type: 3}
   description: Basic Sword that does decent damage.
   baseDamage: 10
@@ -20,13 +20,33 @@ MonoBehaviour:
   attackRange: 3
   toolType: 4
   hasDurability: 1
-  maxDurability: 5
-  currentDurability: 25
+  maxDurability: 25
+  currentDurability: 5
   bonusDamageTargets:
   - targetPrefab: {fileID: 491993309112202026, guid: 8d32e947fa6940749b16410f3e26f202, type: 3}
     targetTag: 
-    bonusDamage: 30
+    bonusDamage: 20
     targetName: Tiger
+  - targetPrefab: {fileID: 2592634222950709681, guid: d9b8c7fe8befed84e820c0cdfdb8a6e5, type: 3}
+    targetTag: 
+    bonusDamage: 20
+    targetName: Chicken
+  - targetPrefab: {fileID: 2425963953780873461, guid: c83f5727b6b5f774088f26d1c4dcdbc3, type: 3}
+    targetTag: 
+    bonusDamage: 20
+    targetName: Deer
+  - targetPrefab: {fileID: 4965504036266380203, guid: e02acd13f7b6c5043845897cfc5115c2, type: 3}
+    targetTag: 
+    bonusDamage: 20
+    targetName: Ghost
+  - targetPrefab: {fileID: 5233605263088741505, guid: 09fb130dccef3944cbda536746842c6c, type: 3}
+    targetTag: 
+    bonusDamage: 20
+    targetName: Skeleton
+  - targetPrefab: {fileID: 7158417727217807835, guid: 077fcd064db8237429aca997101787db, type: 3}
+    targetTag: 
+    bonusDamage: 20
+    targetName: Giant
   worldPrefab: {fileID: 1048507110318876310, guid: 4aae67d07f02a0a49a3489c7f78b5b89, type: 3}
   swingSound: {fileID: 0}
   hitSound: {fileID: 0}

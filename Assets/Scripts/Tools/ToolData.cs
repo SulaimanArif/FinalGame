@@ -24,7 +24,6 @@ public class ToolData : ScriptableObject
     public int currentDurability;
     
     [Header("Bonus Damage Targets")]
-    [Tooltip("Drag prefabs/objects here that this tool does extra damage to")]
     public BonusDamageTarget[] bonusDamageTargets;
     
     [Header("Visual/Audio")]

@@ -189,11 +189,7 @@ public class ToolCombatSystem : MonoBehaviour
                 {
                     audioSource.PlayOneShot(currentTool.hitSound);
                 }
-                
-                if (showHitMarker)
-                {
-                    ShowHitMarker(hit.point);
-                }
+
             }
             
             if (currentToolInstance != null)

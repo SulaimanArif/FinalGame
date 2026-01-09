@@ -8,6 +8,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 719262810357044200, guid: b71b0f8d2f881c743a85228f3030d1cb, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2734492028559244920, guid: b71b0f8d2f881c743a85228f3030d1cb, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 6239969156481072347, guid: b71b0f8d2f881c743a85228f3030d1cb, type: 3}
       propertyPath: m_LocalPosition.x
       value: 77.81827
@@ -52,14 +60,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bush_02 Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 6239969156481229051, guid: b71b0f8d2f881c743a85228f3030d1cb, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5531866383690190313, guid: b71b0f8d2f881c743a85228f3030d1cb, type: 3}
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 719262810357044200, guid: b71b0f8d2f881c743a85228f3030d1cb, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 6239969156481229051, guid: b71b0f8d2f881c743a85228f3030d1cb, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7500029038476207688}
+    - targetCorrespondingSourceObject: {fileID: 6239969156481229051, guid: b71b0f8d2f881c743a85228f3030d1cb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 565834883959771278}
+    - targetCorrespondingSourceObject: {fileID: 2734492028559244920, guid: b71b0f8d2f881c743a85228f3030d1cb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7386844204894317155}
   m_SourcePrefab: {fileID: 100100000, guid: b71b0f8d2f881c743a85228f3030d1cb, type: 3}
 --- !u!1 &2165741779234468621 stripped
 GameObject:
@@ -88,6 +107,64 @@ MonoBehaviour:
   itemDrops:
   - itemData: {fileID: 11400000, guid: 9c161785c792e0c479ec2067bbe171bc, type: 2}
     dropChance: 0.5
+    minAmount: 1
+    maxAmount: 1
+  dropHeight: 1
+  OnDamaged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDeath:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!64 &565834883959771278
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2165741779234468621}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
+--- !u!1 &7882511338082282894 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2734492028559244920, guid: b71b0f8d2f881c743a85228f3030d1cb, type: 3}
+  m_PrefabInstance: {fileID: 5230526687943005174}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7386844204894317155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7882511338082282894}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56351fbc1e591bb41abdfeb93d6b53f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 20
+  currentHealth: 0
+  canBeKnockedBack: 0
+  knockbackResistance: 1
+  flashOnDamage: 1
+  damageColor: {r: 1, g: 0, b: 0, a: 1}
+  flashDuration: 0.2
+  itemDrops:
+  - itemData: {fileID: 0}
+    dropChance: 0.75
     minAmount: 1
     maxAmount: 1
   dropHeight: 1

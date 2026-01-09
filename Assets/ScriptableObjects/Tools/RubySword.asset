@@ -22,7 +22,31 @@ MonoBehaviour:
   hasDurability: 1
   maxDurability: 60
   currentDurability: 60
-  bonusDamageTargets: []
+  bonusDamageTargets:
+  - targetPrefab: {fileID: 2592634222950709681, guid: d9b8c7fe8befed84e820c0cdfdb8a6e5, type: 3}
+    targetTag: 
+    bonusDamage: 50
+    targetName: 
+  - targetPrefab: {fileID: 2425963953780873461, guid: c83f5727b6b5f774088f26d1c4dcdbc3, type: 3}
+    targetTag: 
+    bonusDamage: 0
+    targetName: 
+  - targetPrefab: {fileID: 4965504036266380203, guid: e02acd13f7b6c5043845897cfc5115c2, type: 3}
+    targetTag: 
+    bonusDamage: 50
+    targetName: 
+  - targetPrefab: {fileID: 7158417727217807835, guid: 077fcd064db8237429aca997101787db, type: 3}
+    targetTag: 
+    bonusDamage: 50
+    targetName: 
+  - targetPrefab: {fileID: 5233605263088741505, guid: 09fb130dccef3944cbda536746842c6c, type: 3}
+    targetTag: 
+    bonusDamage: 50
+    targetName: 
+  - targetPrefab: {fileID: 491993309112202026, guid: 8d32e947fa6940749b16410f3e26f202, type: 3}
+    targetTag: 
+    bonusDamage: 50
+    targetName: 
   worldPrefab: {fileID: 4171551103874916069, guid: cdd4e61235550094b99bc737e707ca40, type: 3}
   swingSound: {fileID: 0}
   hitSound: {fileID: 0}
